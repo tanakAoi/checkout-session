@@ -4,26 +4,31 @@ import { Home } from "./pages/Home";
 import { Layout } from "./pages/Layout";
 import { NotFound } from "./pages/NotFound";
 import { Login } from "./pages/Login";
+import { Start } from "./pages/Start";
 
 export const router = createBrowserRouter([
-    {
+  {
+    path: "/",
+    element: <Layout />,
+    errorElement: <NotFound />,
+    children: [
+      {
         path: "/",
-        element: <Layout />,
-        errorElement: <NotFound />,
-        children: [
-            {
-                path: "/",
-                element: <Home />,
-                index: true,
-            },
-        ]
-    },
-    {
+        element: <Start />,
+        index: true,
+      },
+      {
+        path: "/home",
+        element: <Home />,
+      },
+      {
         path: "/register",
-        element: <UserRegister />
-    },
-    {
+        element: <UserRegister />,
+      },
+      {
         path: "/login",
-        element: <Login />
-    }
-])
+        element: <Login />,
+      },
+    ],
+  },
+]);
