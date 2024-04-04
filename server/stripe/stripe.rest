@@ -1,0 +1,7 @@
+POST http://localhost:3000/stripe/create-customer
+Content-Type: application/json
+
+{
+    "name": "Aoi Tanaka",
+    "email": "test@gmail.com"
+}

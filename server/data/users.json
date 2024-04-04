@@ -1,1 +1,37 @@
-[]
+[
+  {
+    "userName": "Aoi Tanaka",
+    "email": "aoitanaka.0523@gmail.com",
+    "password": "$2b$10$zykGci2zxTUHKGnHNdkhtO4/Cqe18JewIVHt6KI8ihF1Qmb2uPHbK"
+  },
+  {
+    "userName": "Jan Ax",
+    "email": "test@gmail.com",
+    "password": "$2b$10$iTCpO6YjBAIGiIHZ14yrv.IS1C/j1l04w0NN2qeVxbik4MqzgjzrK"
+  },
+  {
+    "userName": "Jane Doe",
+    "email": "test@example.com",
+    "password": "$2b$10$xXtgT1EsMRKwNr449bT5oeRgUdjXLQJQYy/F1nfAE1e.bFeliSuc."
+  },
+  {
+    "userName": "John Doe",
+    "email": "test@yaho.com",
+    "password": "$2b$10$rpzdtiolNZS2FSYmTc79OeJccJwGPYU0jyoI4CLwX9Db5arf/W0Ja"
+  },
+  {
+    "userName": "Harry Potter",
+    "email": "test@yahoo.com",
+    "password": "$2b$10$XvFEroxML9MnF/1AX/GAU.U3eE1gT/D5VBRMw0wpjwzJKLAT2dR4y"
+  },
+  {
+    "userName": "Mickey Mouse",
+    "email": "example@gmail.com",
+    "password": "$2b$10$OrFQnNJlr85tUqMZYLvo..YnzBSzUykmnTWqSequHPUF9tn738Zg6"
+  },
+  {
+    "userName": "James Bond",
+    "email": "test@test.com",
+    "password": "$2b$10$g.67f.UKPYrijK8eo7QqJuG9Y6UP6Elky8kxKbRipXYZe7QByF1Sq"
+  }
+]

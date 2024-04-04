@@ -1,28 +1,34 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import { User } from "../User";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const UserRegister = () => {
   const [newUser, setNewUser] = useState<User>(new User("", "", ""));
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNewUser({ ...newUser, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    const register = async () => {
-      const response = await fetch("http://localhost:3000/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newUser),
-      });
-      const data = await response.json();
-      console.log(data);
-    };
-    register();
+    try {
+      const register = async () => {
+        const [authResponse, stripeResponse] = await Promise.all([
+          axios.post("http://localhost:3000/api/auth/register", newUser),
+          axios.post("http://localhost:3000/stripe/create-customer", newUser),
+        ]);
+
+        if (authResponse.status === 201 && stripeResponse.status === 201) {
+          navigate("/home");
+        }
+      };
+      await register();
+    } catch (error) {
+      console.error("Error", error);
+    }
   };
 
   return (
@@ -45,6 +51,7 @@ export const UserRegister = () => {
             value={newUser.userName}
             onChange={handleChange}
             placeholder="Username"
+            required
           />
         </label>
         <label className="input input-bordered flex items-center gap-2">
@@ -64,6 +71,7 @@ export const UserRegister = () => {
             value={newUser.email}
             onChange={handleChange}
             placeholder="Email"
+            required
           />
         </label>
         <label className="input input-bordered flex items-center gap-2">
@@ -86,6 +94,7 @@ export const UserRegister = () => {
             value={newUser.password}
             onChange={handleChange}
             placeholder="Password"
+            required
           />
         </label>
         <button className="btn">register</button>
