@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const cookieSession = require("cookie-session");
 require("dotenv").config();
 
 const authRouter = require("./auth/auth.router");
@@ -8,9 +9,18 @@ const stripeRouter = require("./stripe/stripe.router");
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true
+}));
+app.use(
+  cookieSession({
+    secret: "2we34fgh",
+    maxAge: 1000 * 60 * 60,
+  })
+);
 
 app.use("/api/auth", authRouter);
-app.use("/stripe", stripeRouter);
+app.use("/api/stripe", stripeRouter);
 
 app.listen(3000, () => console.log("Server is up and running...💡"));
