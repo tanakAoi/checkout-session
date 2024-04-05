@@ -1,10 +1,10 @@
 import { useState, ChangeEvent, FormEvent } from "react";
-import { User } from "../User";
+import { NewUser } from "../../models/NewUser";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export const UserRegister = () => {
-  const [newUser, setNewUser] = useState<User>(new User("", "", ""));
+  const [newUser, setNewUser] = useState<NewUser>(new NewUser("", "", ""));
   const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -18,7 +18,7 @@ export const UserRegister = () => {
       const register = async () => {
         const [authResponse, stripeResponse] = await Promise.all([
           axios.post("http://localhost:3000/api/auth/register", newUser),
-          axios.post("http://localhost:3000/stripe/create-customer", newUser),
+          axios.post("http://localhost:3000/api/stripe/create-customer", newUser),
         ]);
 
         if (authResponse.status === 201 && stripeResponse.status === 201) {
@@ -34,7 +34,7 @@ export const UserRegister = () => {
   return (
     <>
       <h2>Register a new user</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="w-1/3">
         <label className="input input-bordered flex items-center gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -65,7 +65,7 @@ export const UserRegister = () => {
             <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
           </svg>
           <input
-            type="text"
+            type="email"
             className="grow"
             name="email"
             value={newUser.email}
@@ -93,7 +93,9 @@ export const UserRegister = () => {
             name="password"
             value={newUser.password}
             onChange={handleChange}
-            placeholder="Password"
+            placeholder="Password (8 - 16) "
+            minLength={8}
+            maxLength={16}
             required
           />
         </label>

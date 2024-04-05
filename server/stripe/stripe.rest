@@ -1,4 +1,4 @@
-POST http://localhost:3000/stripe/create-customer
+POST http://localhost:3000/api/stripe/create-customer
 Content-Type: application/json
 
 {
