@@ -1,11 +1,13 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useState } from "react";
 import { User } from "../../models/User";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
 
 export const Login = () => {
   const [user, setUser] = useState<User>(new User("", ""));
   const [errorMessage, setErrorMessage] = useState("");
+  const auth = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -26,6 +28,7 @@ export const Login = () => {
         );
 
         if (response.status === 200) {
+          auth.login();
           navigate("/home");
         }
       } catch (error: any) {
