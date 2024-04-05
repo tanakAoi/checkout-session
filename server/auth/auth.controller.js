@@ -50,4 +50,9 @@ const login = async (req, res) => {
   res.status(200).json(existingUser.email);
 };
 
-module.exports = { register, login };
+const logout = async (req, res) => {
+  req.session = null
+  res.status(200).json("Successfully logged out")
+}
+
+module.exports = { register, login, logout };
