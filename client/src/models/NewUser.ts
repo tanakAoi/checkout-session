@@ -5,3 +5,9 @@ export class NewUser {
     public password: string
   ) {}
 }
+
+// import { IUser } from "./User";
+
+// export interface INewUser extends IUser {
+//   userName: string;
+// }

@@ -1,5 +1,5 @@
 import { useState, ChangeEvent, FormEvent } from "react";
-import { NewUser } from "../../models/NewUser";
+import { NewUser } from "../models/NewUser";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 

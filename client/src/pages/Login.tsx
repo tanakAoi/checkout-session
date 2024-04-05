@@ -1,8 +1,8 @@
 import { ChangeEvent, FormEvent, useContext, useState } from "react";
-import { User } from "../../models/User";
+import { User } from "../models/User";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../contexts/AuthContext";
+import { AuthContext } from "../contexts/AuthContext";
 
 export const Login = () => {
   const [user, setUser] = useState<User>(new User("", ""));

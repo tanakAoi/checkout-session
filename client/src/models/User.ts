@@ -4,4 +4,8 @@ export class User {
       public password: string
     ) {}
   }
-  
+
+// export interface IUser {
+//   email: string;
+//   password: string;
+// }

@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { Header } from "../components/Header";
 import { useState } from "react";
-import { AuthContext, IAuthContext } from "../../contexts/AuthContext";
+import { AuthContext, IAuthContext } from "../contexts/AuthContext";
 
 export const Layout = () => {
   const [auth, setAuth] = useState<IAuthContext>({

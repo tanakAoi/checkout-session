@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { AuthContext } from "../../contexts/AuthContext";
+import { AuthContext } from "../contexts/AuthContext";
 
 export const Header = () => {
   const auth = useContext(AuthContext);
