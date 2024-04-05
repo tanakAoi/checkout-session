@@ -19,4 +19,11 @@ const createCustomer = async (req, res) => {
   res.status(201).json(customer);
 };
 
-module.exports = { createCustomer };
+const fetchProducts = async (req, res) => {
+  const stripe = initStripe()
+
+  const products = await stripe.products.list();
+  res.status(200).json(products)
+};
+
+module.exports = { createCustomer, fetchProducts };
