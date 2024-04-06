@@ -1,10 +1,12 @@
-import { useState, ChangeEvent, FormEvent } from "react";
-import { NewUser } from "../models/NewUser";
+import { useState, ChangeEvent, FormEvent, useContext } from "react";
+import { IUser, User } from "../models/User";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../contexts/UserContext";
 
 export const UserRegister = () => {
-  const [newUser, setNewUser] = useState<NewUser>(new NewUser("", "", ""));
+  const [newUser, setNewUser] = useState<User>(new User("", "", "", ""));
+  const user = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -14,21 +16,59 @@ export const UserRegister = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    try {
-      const register = async () => {
-        const [authResponse, stripeResponse] = await Promise.all([
-          axios.post("http://localhost:3000/api/auth/register", newUser),
-          axios.post("http://localhost:3000/api/stripe/create-customer", newUser),
-        ]);
+    // try {
+    //   const register = async () => {
+    //     const [authResponse, stripeResponse] = await Promise.all([
+    //       axios.post("http://localhost:3000/api/auth/register", newUser),
+    //       axios.post(
+    //         "http://localhost:3000/api/stripe/create-customer",
+    //         newUser
+    //       ),
+    //     ]);
 
-        if (authResponse.status === 201 && stripeResponse.status === 201) {
-          navigate("/home");
+    //     if (authResponse.status === 201 && stripeResponse.status === 201) {
+    //       const userWithId = { ...newUser, stripeId: stripeResponse.data.id };
+    //       setNewUser(userWithId);
+    //       // user.login(userWithId);
+    //       navigate("/")
+    //     }
+    //   };
+    //   await register();
+    // } catch (error) {
+    //   console.error("Error", error);
+    // }
+    try {
+      const registerStripe = async () => {
+        const response = await axios.post(
+          "http://localhost:3000/api/stripe/create-customer",
+          newUser
+        );
+
+        if (response.status === 201 && response.data.id ) {
+          const userWithId = { ...newUser, stripeId: response.data.id };
+          setNewUser(userWithId);
+
+          await registerAuth(userWithId);
         }
       };
-      await register();
+      registerStripe();
     } catch (error) {
       console.error("Error", error);
     }
+
+    const registerAuth = async (userWithId: IUser) => {
+      console.log(userWithId);
+      
+      const response = await axios.post(
+        "http://localhost:3000/api/auth/register",
+        userWithId
+      );
+
+      if (response.status === 201) {
+        user.login(userWithId);
+        navigate("/")
+      }
+    };
   };
 
   return (

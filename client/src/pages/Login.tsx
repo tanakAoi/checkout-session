@@ -2,16 +2,17 @@ import { ChangeEvent, FormEvent, useContext, useState } from "react";
 import { User } from "../models/User";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../contexts/AuthContext";
+import { UserContext } from "../contexts/UserContext";
+import { AuthLogin } from "../components/AuthLogin";
 
 export const Login = () => {
-  const [user, setUser] = useState<User>(new User("", ""));
+  const [userData, setUserData] = useState<User>(new User("", "", "", ""));
   const [errorMessage, setErrorMessage] = useState("");
-  const auth = useContext(AuthContext);
+  const user = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    setUserData({ ...userData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -21,14 +22,14 @@ export const Login = () => {
       try {
         const response = await axios.post(
           "http://localhost:3000/api/auth/login",
-          user,
+          userData,
           {
             withCredentials: true,
           }
         );
 
         if (response.status === 200) {
-          auth.login();
+          user.login(response.data);
           navigate("/home");
         }
       } catch (error: any) {

@@ -5,13 +5,12 @@ import { UserContext } from "../contexts/UserContext";
 import { User } from "../models/User";
 
 export const Home = () => {
-  const [userData, setUserData] = useState<User>(new User("", "", ""));
   const user = useContext(UserContext);
   const [products, setProducts] = useState<IProduct[]>([]);
   const [cartItems, setCartItems] = useState<IProduct[]>(
     JSON.parse(localStorage.getItem("cart-items") || "[]")
   );
-
+  
   useEffect(() => {
     const authorize = async () => {
       const response = await axios.get(
@@ -21,15 +20,13 @@ export const Home = () => {
         }
       );
       if (response.status === 200) {
-        setUserData(response.data);
-        user.login(userData);
+        user.login(response.data);
 
         const fetchProducts = async () => {
           const response = await axios.get(
             "http://localhost:3000/api/stripe/fetch-products"
           );
           const productsData = response.data.data;
-          console.log(productsData);
           
           const products: IProduct[] = productsData.map((product: IProduct) => ({
             id: product.id,
