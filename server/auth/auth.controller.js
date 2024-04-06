@@ -55,4 +55,11 @@ const logout = async (req, res) => {
   res.status(200).json("Successfully logged out")
 }
 
-module.exports = { register, login, logout };
+const authorize = async (req, res) => {
+  if(!req.session.user) {
+    return res.status(401).json("Not logged in")
+  }
+  res.status(200).json(req.session.user)
+}
+
+module.exports = { register, login, logout, authorize };
