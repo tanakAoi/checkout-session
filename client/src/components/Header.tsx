@@ -4,7 +4,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 
 export const Header = () => {
-  // const auth = useContext(AuthContext);
   const user = useContext(UserContext)
   const navigate = useNavigate();
 
