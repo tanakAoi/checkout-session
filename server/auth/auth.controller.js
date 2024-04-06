@@ -3,11 +3,12 @@ const bcrypt = require("bcrypt");
 const fs = require("fs").promises;
 
 const register = async (req, res) => {
-  const { userName, email, password } = req.body;
-
+  const { stripeId, userName, email, password } = req.body;
+  
   const users = await fetchUsers();
+  console.log(users);
 
-  const userAlreadyExists = users.find((u) => u.email === email);
+  const userAlreadyExists = users.find((u) => u.stripeId === stripeId);
   if (userAlreadyExists) {
     return res.status(400).json("User already exists.");
   }
@@ -15,6 +16,7 @@ const register = async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const newUser = {
+    stripeId,
     userName,
     email,
     password: hashedPassword,
@@ -47,7 +49,7 @@ const login = async (req, res) => {
 
   req.session.user = existingUser;
 
-  res.status(200).json(existingUser.email);
+  res.status(200).json(existingUser);
 };
 
 const logout = async (req, res) => {
@@ -56,6 +58,7 @@ const logout = async (req, res) => {
 }
 
 const authorize = async (req, res) => {
+  console.log(req.session.user);
   if(!req.session.user) {
     return res.status(401).json("Not logged in")
   }

@@ -1,11 +1,34 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { IProduct } from "../models/IProduct";
+import { UserContext } from "../contexts/UserContext";
 
 export const Cart = () => {
   const [cartItems, setCartItems] = useState<IProduct[]>(
     JSON.parse(localStorage.getItem("cart-items") || "[]")
   );
+  const userContext = useContext(UserContext);
+
+  useEffect(() => {
+    const authorize = async () => {
+      const response = await axios.get(
+        "http://localhost:3000/api/auth/authorize",
+        {
+          withCredentials: true,
+        }
+      );
+      if (response.status === 200) {
+        userContext.login(response.data);
+      } else {
+        userContext.logout();
+      }
+    };
+    authorize();
+  }, [userContext.isLoggedIn]);
+  
+  useEffect(() => {
+    localStorage.setItem("cart-items", JSON.stringify(cartItems));
+  }, [cartItems]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, id: string) => {
     const newQuantity = parseInt(e.target.value, 10);
@@ -20,20 +43,25 @@ export const Cart = () => {
     );
   };
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>, id: string) => {
+  const handleClick = (id: string) => {
     setCartItems(cartItems.filter((item) => item.id !== id));
   };
 
-  useEffect(() => {
-    localStorage.setItem("cart-items", JSON.stringify(cartItems));
-  }, [cartItems]);
 
   const checkout = async () => {
-    const response = await axios.post("http://localhost:3000/api/stripe/checkout", cartItems);
-    window.location = response.data.url
+    const data = {
+      cartItems: cartItems,
+      customerId: userContext.userData.stripeId
+    }
 
-    if(response.status === 200) {
-        localStorage.setItem("cart-items", "[]")
+    const response = await axios.post(
+      "http://localhost:3000/api/stripe/checkout",
+      data
+    );
+    window.location = response.data.url;
+
+    if (response.status === 200) {
+      localStorage.setItem("cart-items", "[]");
     }
   };
 
@@ -66,7 +94,7 @@ export const Cart = () => {
               type="button"
               className="btn btn-circle btn-outline"
               name="delete"
-              onClick={(e) => handleClick(e, item.id)}
+              onClick={() => handleClick(item.id)}
             >
               x
             </button>

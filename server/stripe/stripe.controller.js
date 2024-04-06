@@ -31,10 +31,11 @@ const fetchProducts = async (req, res) => {
 const checkout = async (req, res) => {
   const stripe = initStripe();
 
-  const cartItems = req.body;
+  const {cartItems, customerId} = req.body;
 
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
+    customer: customerId,
     line_items: cartItems.map((item) => {
       return {
         price: item.default_price.id,

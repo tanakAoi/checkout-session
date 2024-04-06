@@ -1,5 +1,6 @@
 export class User {
   constructor(
+    public stripeId: string,
     public userName: string,
     public email: string,
     public password: string
@@ -7,7 +8,8 @@ export class User {
 }
 
 export interface IUser {
-  userName: string,
+  stripeId: string;
+  userName: string;
   email: string;
   password: string;
 }
