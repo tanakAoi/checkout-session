@@ -20,12 +20,31 @@ const createCustomer = async (req, res) => {
 };
 
 const fetchProducts = async (req, res) => {
-  const stripe = initStripe()
+  const stripe = initStripe();
 
   const products = await stripe.products.list({
-    expand: ["data.default_price"]
+    expand: ["data.default_price"],
   });
-  res.status(200).json(products)
+  res.status(200).json(products);
 };
 
-module.exports = { createCustomer, fetchProducts };
+const checkout = async (req, res) => {
+  const stripe = initStripe();
+
+  const cartItems = req.body;
+
+  const session = await stripe.checkout.sessions.create({
+    mode: "payment",
+    line_items: cartItems.map((item) => {
+      return {
+        price: item.default_price.id,
+        quantity: item.quantity,
+      };
+    }),
+    success_url: "http://localhost:5173/confirmation",
+    cancel_url: "http://localhost:5173/home",
+  });
+  res.status(200).json({ url: session.url });
+};
+
+module.exports = { createCustomer, fetchProducts, checkout };
