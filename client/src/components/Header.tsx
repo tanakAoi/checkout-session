@@ -1,10 +1,11 @@
 import axios from "axios";
 import { useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { AuthContext } from "../contexts/AuthContext";
+import { UserContext } from "../contexts/UserContext";
 
 export const Header = () => {
-  const auth = useContext(AuthContext);
+  // const auth = useContext(AuthContext);
+  const user = useContext(UserContext)
   const navigate = useNavigate();
 
   const logout = async () => {
@@ -18,7 +19,7 @@ export const Header = () => {
       );
 
       if (response.status === 200) {
-        auth.logout();
+        user.logout();
         navigate("/");
       }
     } catch (error: any) {
@@ -29,9 +30,9 @@ export const Header = () => {
   return (
     <header className="h-16 bg-stone-300 px-6 flex items-center justify-between">
       <NavLink to={"/home"}>Cafe Nova</NavLink>
-      {auth.isLoggedIn ? (
+      {user.isLoggedIn ? (
         <div className="flex gap-4">
-          <button>Cart</button>
+          <button><NavLink to={"/cart"}>Cart</NavLink></button>
           <button onClick={logout}>Logout</button>
         </div>
       ) : (

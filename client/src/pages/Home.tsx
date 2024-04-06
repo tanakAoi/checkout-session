@@ -1,19 +1,14 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { IProduct } from "../models/IProduct";
-import { AuthContext } from "../contexts/AuthContext";
 import { UserContext } from "../contexts/UserContext";
-
-interface IUser {
-  userName: string;
-  email: string;
-}
+import { User } from "../models/User";
 
 export const Home = () => {
-  const [user, setUser] = useState<IUser>();
-  // const user = useContext(UserContext);
-  const auth = useContext(AuthContext);
+  const [userData, setUserData] = useState<User>(new User("", "", ""));
+  const user = useContext(UserContext);
   const [products, setProducts] = useState<IProduct[]>([]);
+  const [cartItems, setCartItems] = useState<IProduct[]>([]);
 
   useEffect(() => {
     const authorize = async () => {
@@ -24,9 +19,8 @@ export const Home = () => {
         }
       );
       if (response.status === 200) {
-        // user.login(response.data);
-        setUser(response.data);
-        auth.login();
+        setUserData(response.data);
+        user.login(userData);
 
         const fetchProducts = async () => {
           const response = await axios.get(
@@ -37,12 +31,19 @@ export const Home = () => {
         };
         fetchProducts();
       } else {
-        // user.logout();
-        auth.logout();
+        user.logout();
       }
     };
     authorize();
-  }, [auth.isLoggedIn]);
+  }, [user.isLoggedIn]);
+
+  useEffect(() => {
+    user.updateCartItems(cartItems);
+  }, [cartItems]);
+
+  const handleClick = (product: IProduct) => {
+    setCartItems([...cartItems, product]);
+  };
 
   return (
     <div>
@@ -56,8 +57,13 @@ export const Home = () => {
             <h2 className="font-bold">{product.name}</h2>
             <p className="max-w-xs">{product.description}</p>
             <div className="flex w-full items-center justify-around">
-              <p className="font-bold">{(product.default_price.unit_amount / 100).toFixed(2)}{product.default_price.currency}</p>
-              <button className="btn">Add to cart</button>
+              <p className="font-bold">
+                {(product.default_price.unit_amount / 100).toFixed(2)}
+                {product.default_price.currency}
+              </p>
+              <button className="btn" onClick={() => handleClick(product)}>
+                Add to cart
+              </button>
             </div>
           </div>
         ))}
