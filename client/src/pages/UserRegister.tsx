@@ -57,8 +57,6 @@ export const UserRegister = () => {
     }
 
     const registerAuth = async (userWithId: IUser) => {
-      console.log(userWithId);
-      
       const response = await axios.post(
         "http://localhost:3000/api/auth/register",
         userWithId

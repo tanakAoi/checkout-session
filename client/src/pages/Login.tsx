@@ -3,7 +3,6 @@ import { User } from "../models/User";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
-import { AuthLogin } from "../components/AuthLogin";
 
 export const Login = () => {
   const [userData, setUserData] = useState<User>(new User("", "", "", ""));
