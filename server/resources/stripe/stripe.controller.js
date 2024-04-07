@@ -30,6 +30,16 @@ const fetchProducts = async (req, res) => {
 const checkout = async (req, res) => {
   const { cartItems, customerId } = req.body;
 
+  const coupon = await stripe.coupons.create({
+    percent_off: 20,
+    duration: "once",
+  });
+
+  await stripe.promotionCodes.create({
+    coupon: coupon.id,
+    code: "PROMO20",
+  });
+
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     customer: customerId,
@@ -39,6 +49,7 @@ const checkout = async (req, res) => {
         quantity: item.quantity,
       };
     }),
+    allow_promotion_codes: true,
     success_url: "http://localhost:5173/confirmation",
     cancel_url: "http://localhost:5173/home",
   });
