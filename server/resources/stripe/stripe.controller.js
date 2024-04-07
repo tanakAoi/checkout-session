@@ -60,14 +60,10 @@ const validation = async (req, res) => {
       total: session.amount_total,
       shippingAddress: session.shipping_address_collection,
     };
-    console.log(order);
 
     const orders = JSON.parse(await fs.readFile("./data/orders.json"));
     orders.push(order);
-    await fs.writeFile(
-      "./data/orders.json",
-      JSON.stringify(orders, null, 5)
-    );
+    await fs.writeFile("./data/orders.json", JSON.stringify(orders, null, 5));
   }
 
   res.status(200).json({ verified: true });
