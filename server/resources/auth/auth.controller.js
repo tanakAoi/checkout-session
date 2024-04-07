@@ -1,4 +1,4 @@
-const { fetchUsers } = require("../services/fetchUsers");
+const { fetchUsers } = require("../../services/fetchUsers");
 const bcrypt = require("bcrypt");
 const fs = require("fs").promises;
 
@@ -58,7 +58,6 @@ const logout = async (req, res) => {
 }
 
 const authorize = async (req, res) => {
-  console.log(req.session.user);
   if(!req.session.user) {
     return res.status(401).json("Not logged in")
   }

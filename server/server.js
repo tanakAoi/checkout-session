@@ -3,8 +3,8 @@ const cors = require("cors");
 const cookieSession = require("cookie-session");
 require("dotenv").config();
 
-const authRouter = require("./auth/auth.router");
-const stripeRouter = require("./stripe/stripe.router");
+const authRouter = require("./resources/auth/auth.router")
+const stripeRouter = require("./resources/stripe/stripe.router");
 
 const app = express();
 
