@@ -28,7 +28,7 @@ const fetchProducts = async (req, res) => {
 };
 
 const checkout = async (req, res) => {
-  const { cartItems, customerId } = req.body;
+  const { cartItems, customerId, servicePoint } = req.body;
 
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
@@ -39,6 +39,7 @@ const checkout = async (req, res) => {
         quantity: item.quantity,
       };
     }),
+    allow_promotion_codes: true,
     success_url: "http://localhost:5173/confirmation",
     cancel_url: "http://localhost:5173/home",
   });
@@ -48,9 +49,11 @@ const checkout = async (req, res) => {
 const validation = async (req, res) => {
   const sessionId = req.body.sessionId;
   const session = await stripe.checkout.sessions.retrieve(sessionId);
-
+  
+  
   if (session.payment_status === "paid") {
     const lineItems = await stripe.checkout.sessions.listLineItems(sessionId);
+    const servicePoint = JSON.parse(req.body.servicePoint)
 
     const order = {
       orderNumber: Math.floor(Math.random() * 10000000),
@@ -58,7 +61,12 @@ const validation = async (req, res) => {
       customerName: session.customer_details.name,
       products: lineItems.data,
       total: session.amount_total,
-      shippingAddress: session.shipping_address_collection,
+      shippingAddress: {
+        servicePoint: servicePoint.name,
+        city: servicePoint.deliveryAddress.city,
+        street: servicePoint.deliveryAddress.streetName + servicePoint.deliveryAddress.streetNumber,
+        postalCode: servicePoint.deliveryAddress.postalCode
+      },
     };
 
     const orders = JSON.parse(await fs.readFile("./data/orders.json"));
