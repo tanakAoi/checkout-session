@@ -10,22 +10,25 @@ export const Confirmation = () => {
       const validation = async () => {
         let sessionId;
         const sessionIdData = localStorage.getItem("sessionID");
+        const servicePoint = localStorage.getItem("service-point");
 
-        if (sessionIdData) {
+        if (sessionIdData && servicePoint ) {
           sessionId = JSON.parse(sessionIdData);
+
+          const data = {sessionId: sessionId, servicePoint: servicePoint}
 
           const response = await axios.post(
             "http://localhost:3000/api/stripe/validation",
-            { sessionId }
+            data
           );
           console.log(response);
-          
 
-          if ( response.status === 200 ) {
+          if (response.status === 200) {
             setVerified(response.data.verified);
             setIsLoading(false);
             localStorage.setItem("sessionID", "");
             localStorage.setItem("cart-items", "[]");
+            localStorage.setItem("service-point", "");
           }
         }
       };
