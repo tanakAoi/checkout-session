@@ -25,7 +25,7 @@ export const Cart = () => {
     };
     authorize();
   }, [userContext.isLoggedIn]);
-  
+
   useEffect(() => {
     localStorage.setItem("cart-items", JSON.stringify(cartItems));
   }, [cartItems]);
@@ -47,22 +47,19 @@ export const Cart = () => {
     setCartItems(cartItems.filter((item) => item.id !== id));
   };
 
-
   const checkout = async () => {
     const data = {
       cartItems: cartItems,
-      customerId: userContext.userData.stripeId
-    }
+      customerId: userContext.userData.stripeId,
+    };
 
     const response = await axios.post(
       "http://localhost:3000/api/stripe/checkout",
       data
     );
-    window.location = response.data.url;
 
-    if (response.status === 200) {
-      localStorage.setItem("cart-items", "[]");
-    }
+    localStorage.setItem("sessionID", JSON.stringify(response.data.id));
+    window.location = response.data.url;
   };
 
   return (

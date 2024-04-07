@@ -11,3 +11,16 @@ GET http://localhost:3000/api/stripe/fetch-products
 
 ###
 POST http://localhost:3000/api/stripe/checkout
+Content-Type: application/json
+
+{
+}
+
+###
+POST http://localhost:3000/api/stripe/validation
+Content-Type: application/json
+
+{
+    "sessionId": "r3wer4ety5"
+}
+
