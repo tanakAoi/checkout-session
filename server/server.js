@@ -6,6 +6,7 @@ require("dotenv").config();
 const authRouter = require("./resources/auth/auth.router")
 const stripeRouter = require("./resources/stripe/stripe.router");
 const postnordRouter = require("./resources/postnord/postnord.router")
+const sendgridRouter = require("./resources/sendgrid/sendgrid.router")
 
 const app = express();
 
@@ -24,5 +25,6 @@ app.use(
 app.use("/api/auth", authRouter);
 app.use("/api/stripe", stripeRouter);
 app.use("/api/postnord", postnordRouter);
+app.use("/api/sendgrid", sendgridRouter);
 
 app.listen(3000, () => console.log("Server is up and running...💡"));

@@ -28,7 +28,7 @@ const fetchProducts = async (req, res) => {
 };
 
 const checkout = async (req, res) => {
-  const { cartItems, customerId, servicePoint } = req.body;
+  const { cartItems, customerId } = req.body;
 
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
@@ -49,7 +49,6 @@ const checkout = async (req, res) => {
 const validation = async (req, res) => {
   const sessionId = req.body.sessionId;
   const session = await stripe.checkout.sessions.retrieve(sessionId);
-  
   
   if (session.payment_status === "paid") {
     const lineItems = await stripe.checkout.sessions.listLineItems(sessionId);
