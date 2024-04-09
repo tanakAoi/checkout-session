@@ -2,6 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { NavLink } from "react-router-dom";
+import { checkAuth } from "../components/CheckAuth";
 
 export const Confirmation = () => {
   const [verified, setVerified] = useState(false);
@@ -10,20 +11,7 @@ export const Confirmation = () => {
   const user = useContext(UserContext);
 
   useEffect(() => {
-    const authorize = async () => {
-      const response = await axios.get(
-        "http://localhost:3000/api/auth/authorize",
-        {
-          withCredentials: true,
-        }
-      );
-      if (response.status === 200) {
-        user.login(response.data);
-      } else {
-        user.logout();
-      }
-    };
-    authorize();
+    checkAuth(user);
   }, [user.isLoggedIn]);
 
   useEffect(() => {
@@ -63,7 +51,6 @@ export const Confirmation = () => {
             "http://localhost:3000/api/sendgrid/send-order-confirmation",
             user.userData
           );
-          console.log(response);
           if (response.status === 200) {
             setIsMailSent(true);
           }

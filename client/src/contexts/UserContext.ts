@@ -16,6 +16,6 @@ export const UserContext = createContext<IUserContext>({
     email: "",
     password: "",
   },
-  login: () => {},
+  login: (user: IUser) => {},
   logout: () => {},
 });

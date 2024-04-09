@@ -4,12 +4,13 @@ import { IProduct } from "../models/IProduct";
 import { UserContext } from "../contexts/UserContext";
 import { UserAddress } from "../models/UserAddress";
 import { ServicePoint } from "../models/ServicePoint";
+import { checkAuth } from "../components/CheckAuth";
 
 export const Cart = () => {
   const [cartItems, setCartItems] = useState<IProduct[]>(
     JSON.parse(localStorage.getItem("cart-items") || "[]")
   );
-  const userContext = useContext(UserContext);
+  const user = useContext(UserContext);
   const [isAddressInputVisible, setIsAddressInputVisible] = useState(false);
   const [userAddress, setUserAddress] = useState<UserAddress>(
     new UserAddress("", "", { streetName: "", streetNumber: "" })
@@ -18,21 +19,8 @@ export const Cart = () => {
   const [userServicePoint, setUserServicePoint] = useState<ServicePoint>();
 
   useEffect(() => {
-    const authorize = async () => {
-      const response = await axios.get(
-        "http://localhost:3000/api/auth/authorize",
-        {
-          withCredentials: true,
-        }
-      );
-      if (response.status === 200) {
-        userContext.login(response.data);
-      } else {
-        userContext.logout();
-      }
-    };
-    authorize();
-  }, [userContext.isLoggedIn]);
+    checkAuth(user);
+  }, [user.isLoggedIn]);
 
   useEffect(() => {
     localStorage.setItem("cart-items", JSON.stringify(cartItems));
@@ -56,7 +44,6 @@ export const Cart = () => {
   };
 
   const handleAddress = (e: ChangeEvent<HTMLInputElement>) => {
-
     setUserAddress({ ...userAddress, [e.target.name]: e.target.value });
 
     if (e.target.name === "street") {
@@ -79,7 +66,6 @@ export const Cart = () => {
         "http://localhost:3000/api/postnord/service-points",
         userAddress
       );
-      console.log(response.data);
       setServicePoints(
         response.data.servicePointInformationResponse.servicePoints
       );
@@ -89,11 +75,11 @@ export const Cart = () => {
   };
 
   const checkout = async () => {
-    localStorage.setItem("service-point", JSON.stringify(userServicePoint))
-    
+    localStorage.setItem("service-point", JSON.stringify(userServicePoint));
+
     const data = {
       cartItems: cartItems,
-      customerId: userContext.userData.stripeId,
+      customerId: user.userData.stripeId,
     };
 
     const response = await axios.post(
@@ -107,41 +93,51 @@ export const Cart = () => {
 
   return (
     <div className="py-10 flex flex-col justify-center gap-10">
-      <h2>Cart</h2>
+      <h2 className="text-3xl">Your cart</h2>
       {cartItems.map((item) => (
-        <div
-          key={item.id}
-          className="flex flex-col justify-between items-center max-w-xl gap-4"
-        >
-          <img src={item.images} alt={item.name} className="max-w-xs" />
-          <h2 className="font-bold">{item.name}</h2>
-          <div className="flex w-full items-center justify-between">
+        <div key={item.id} className="flex w-lg gap-4">
+          <img src={item.images} alt={item.name} className="max-w-48" />
+          <div className="flex flex-col justify-between">
+            <h2 className="font-bold">{item.name}</h2>
             <p className="font-bold">
               {(item.default_price.unit_amount / 100).toFixed(2)}
               {item.default_price.currency}
             </p>
-            <input
-              onChange={(e) => changeQuantity(e, item.id)}
-              className="input input-ghost"
-              type="number"
-              min={1}
-              name="quantity"
-              id=""
-              placeholder="1"
-              value={item.quantity}
-            />
-            <button
-              type="button"
-              className="btn btn-circle btn-outline"
-              name="delete"
-              onClick={() => deleteItem(item.id)}
-            >
-              x
-            </button>
+            <div className="flex justify-between items-center">
+              <input
+                onChange={(e) => changeQuantity(e, item.id)}
+                className="input w-24 text-lg font-bold"
+                type="number"
+                min={1}
+                name="quantity"
+                placeholder="1"
+                value={item.quantity}
+              />
+              <button
+                className="btn btn-square btn-outline"
+                name="delete"
+                onClick={() => deleteItem(item.id)}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       ))}
-    
+
       <button className="btn" onClick={() => setIsAddressInputVisible(true)}>
         Gå vidare
       </button>
@@ -182,10 +178,17 @@ export const Cart = () => {
             </button>
           </form>
           {servicePoints.length > 0 ? (
-            <div className="py-10 flex flex-col justify-center gap-5">
+            <div className="py-10 flex flex-col justify-center items-center gap-5">
               {servicePoints.map((servicePoint) => {
                 return (
-                  <div className="card w-96 bg-base-100 shadow-xl">
+                  <div
+                    key={servicePoint.servicePointId}
+                    className={`card w-96 bg-base-100 shadow-xl ${
+                      userServicePoint === servicePoint
+                        ? "border-4 border-cyan-600"
+                        : "border-4 border-transparent"
+                    }`}
+                  >
                     <div className="card-body">
                       <h3 className="card-title">{servicePoint.name}</h3>
                       <p>
@@ -209,7 +212,13 @@ export const Cart = () => {
           ) : (
             ""
           )}
-          {userServicePoint ? <button className="btn" onClick={checkout}>Checkout</button> : ""}
+          {userServicePoint ? (
+            <button className="btn w-full" onClick={checkout}>
+              Checkout
+            </button>
+          ) : (
+            ""
+          )}
         </div>
       ) : (
         ""
