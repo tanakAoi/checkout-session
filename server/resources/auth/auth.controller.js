@@ -20,11 +20,15 @@ const register = async (req, res) => {
     email,
     password: hashedPassword,
   };
+
   users.push(newUser);
+  
   await fs.writeFile(
     "../server/data/users.json",
     JSON.stringify(users, null, 2)
   );
+
+  req.session.user = newUser
 
   res.status(201).json(newUser);
 };

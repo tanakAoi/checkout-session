@@ -16,27 +16,6 @@ export const UserRegister = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // try {
-    //   const register = async () => {
-    //     const [authResponse, stripeResponse] = await Promise.all([
-    //       axios.post("http://localhost:3000/api/auth/register", newUser),
-    //       axios.post(
-    //         "http://localhost:3000/api/stripe/create-customer",
-    //         newUser
-    //       ),
-    //     ]);
-
-    //     if (authResponse.status === 201 && stripeResponse.status === 201) {
-    //       const userWithId = { ...newUser, stripeId: stripeResponse.data.id };
-    //       setNewUser(userWithId);
-    //       // user.login(userWithId);
-    //       navigate("/")
-    //     }
-    //   };
-    //   await register();
-    // } catch (error) {
-    //   console.error("Error", error);
-    // }
     try {
       const registerStripe = async () => {
         const response = await axios.post(
@@ -44,7 +23,7 @@ export const UserRegister = () => {
           newUser
         );
 
-        if (response.status === 201 && response.data.id ) {
+        if (response.status === 201 && response.data.id) {
           const userWithId = { ...newUser, stripeId: response.data.id };
           setNewUser(userWithId);
 
@@ -59,12 +38,15 @@ export const UserRegister = () => {
     const registerAuth = async (userWithId: IUser) => {
       const response = await axios.post(
         "http://localhost:3000/api/auth/register",
-        userWithId
+        userWithId,
+        {
+          withCredentials: true,
+        }
       );
 
       if (response.status === 201) {
         user.login(userWithId);
-        navigate("/")
+        navigate("/home");
       }
     };
   };
