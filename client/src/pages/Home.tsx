@@ -12,40 +12,46 @@ export const Home = () => {
 
   useEffect(() => {
     const authorize = async () => {
-      const response = await axios.get(
-        "http://localhost:3000/api/auth/authorize",
-        {
-          withCredentials: true,
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/auth/authorize",
+          {
+            withCredentials: true,
+          }
+        );
+
+        if (response.status === 200) {
+          user.login(response.data);
+
+          const fetchProducts = async () => {
+            const response = await axios.get(
+              "http://localhost:3000/api/stripe/fetch-products"
+            );
+            const productsData = response.data.data;
+
+            const products: IProduct[] = productsData.map(
+              (product: IProduct) => ({
+                id: product.id,
+                name: product.name,
+                description: product.description,
+                default_price: {
+                  id: product.default_price.id,
+                  unit_amount: product.default_price.unit_amount,
+                  currency: product.default_price.currency,
+                },
+                images: product.images,
+                quantity: 1,
+              })
+            );
+            setProducts(products);
+          };
+          fetchProducts();
         }
-      );
-      if (response.status === 200) {
-        user.login(response.data);
-
-        const fetchProducts = async () => {
-          const response = await axios.get(
-            "http://localhost:3000/api/stripe/fetch-products"
-          );
-          const productsData = response.data.data;
-
-          const products: IProduct[] = productsData.map(
-            (product: IProduct) => ({
-              id: product.id,
-              name: product.name,
-              description: product.description,
-              default_price: {
-                id: product.default_price.id,
-                unit_amount: product.default_price.unit_amount,
-                currency: product.default_price.currency,
-              },
-              images: product.images,
-              quantity: 1,
-            })
-          );
-          setProducts(products);
-        };
-        fetchProducts();
-      } else {
-        user.logout();
+      } catch (error: any) {
+        if ((error.response.status = 401)) {
+          user.logout();
+        }
+        console.error("Error", error);
       }
     };
     authorize();
