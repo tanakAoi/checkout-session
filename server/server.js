@@ -27,4 +27,26 @@ app.use("/api/stripe", stripeRouter);
 app.use("/api/postnord", postnordRouter);
 app.use("/api/sendgrid", sendgridRouter);
 
+app.use((err, req, res, next) => {
+  console.log(err)
+
+  const response = {
+    message: err.message || "Something went wrong."
+  }
+
+  if( !err.statusCode) {
+    err.statusCode = 500
+  }
+
+  if(err.name === "ENOENT") {
+    err.statusCode = 404
+    response.message = "Could not find what you're looking for"
+  } else if (err.name === "ReferenceError") {
+    res.statusCode = 400
+    response.message = "Wrong JS code"
+  }
+
+  res.status(err.statusCode).json(response.message)
+})
+
 app.listen(3000, () => console.log("Server is up and running...💡"));
