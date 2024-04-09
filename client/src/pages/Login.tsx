@@ -44,9 +44,9 @@ export const Login = () => {
   };
 
   return (
-    <>
-      <h2>Login</h2>
-      <form action="" onSubmit={handleSubmit}>
+    <div className="h-screen flex flex-col justify-center items-center gap-10">
+      <h2 className="text-xl">Login</h2>
+      <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
         <label className="input input-bordered flex items-center gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -93,6 +93,6 @@ export const Login = () => {
         <button className="btn">Login</button>
         {errorMessage ? <span>{errorMessage}</span> : ""}
       </form>
-    </>
+    </div>
   );
 };

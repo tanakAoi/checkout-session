@@ -30,7 +30,7 @@ export const Layout = () => {
   return (
     <UserContext.Provider value={user}>
       <Header />
-      <main className="min-h-screen flex flex-col items-center justify-center">
+      <main className="flex flex-col items-center">
         <Outlet />
       </main>
       <footer></footer>

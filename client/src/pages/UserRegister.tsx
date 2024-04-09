@@ -52,9 +52,9 @@ export const UserRegister = () => {
   };
 
   return (
-    <>
-      <h2>Register a new user</h2>
-      <form onSubmit={handleSubmit} className="w-1/3">
+    <div className="h-screen flex flex-col justify-center items-center gap-10">
+      <h2 className="text-xl">Register a new user</h2>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <label className="input input-bordered flex items-center gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -113,7 +113,7 @@ export const UserRegister = () => {
             name="password"
             value={newUser.password}
             onChange={handleChange}
-            placeholder="Password (8 - 16) "
+            placeholder="Password"
             minLength={8}
             maxLength={16}
             required
@@ -121,6 +121,6 @@ export const UserRegister = () => {
         </label>
         <button className="btn">register</button>
       </form>
-    </>
+    </div>
   );
 };
