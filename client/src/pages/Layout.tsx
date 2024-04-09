@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Header } from "../components/Header";
 import { useState } from "react";
 import { IUserContext, UserContext } from "../contexts/UserContext";
@@ -16,6 +16,7 @@ export const Layout = () => {
     login: () => {},
     logout: () => {},
   });
+  const navigate = useNavigate()
 
   user.login = (userData: IUser) => {
     setUser({ ...user, isLoggedIn: true, userData: userData });
@@ -23,7 +24,8 @@ export const Layout = () => {
 
   user.logout = () => {
     setUser({ ...user, isLoggedIn: false});
-  };
+    navigate("/")
+  };  
 
   return (
     <UserContext.Provider value={user}>

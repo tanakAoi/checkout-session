@@ -2,7 +2,6 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { IProduct } from "../models/IProduct";
 import { UserContext } from "../contexts/UserContext";
-import { User } from "../models/User";
 
 export const Home = () => {
   const user = useContext(UserContext);
@@ -10,7 +9,7 @@ export const Home = () => {
   const [cartItems, setCartItems] = useState<IProduct[]>(
     JSON.parse(localStorage.getItem("cart-items") || "[]")
   );
-  
+
   useEffect(() => {
     const authorize = async () => {
       const response = await axios.get(
@@ -27,19 +26,21 @@ export const Home = () => {
             "http://localhost:3000/api/stripe/fetch-products"
           );
           const productsData = response.data.data;
-          
-          const products: IProduct[] = productsData.map((product: IProduct) => ({
-            id: product.id,
-            name: product.name,
-            description: product.description,
-            default_price:  {
-              id: product.default_price.id,
-              unit_amount: product.default_price.unit_amount,
-              currency: product.default_price.currency
-            },
-            images: product.images,
-            quantity: 1
-          }))
+
+          const products: IProduct[] = productsData.map(
+            (product: IProduct) => ({
+              id: product.id,
+              name: product.name,
+              description: product.description,
+              default_price: {
+                id: product.default_price.id,
+                unit_amount: product.default_price.unit_amount,
+                currency: product.default_price.currency,
+              },
+              images: product.images,
+              quantity: 1,
+            })
+          );
           setProducts(products);
         };
         fetchProducts();
