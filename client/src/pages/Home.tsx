@@ -13,38 +13,43 @@ export const Home = () => {
 
   useEffect(() => {
     checkAuth(user);
+    
+      if (user.isLoggedIn) {
+        const fetchProducts = async () => {
+          const response = await axios.get(
+            "http://localhost:3000/api/stripe/fetch-products"
+          );
+          const productsData = response.data.data;
+    
+          const products: IProduct[] = productsData.map((product: IProduct) => ({
+            id: product.id,
+            name: product.name,
+            description: product.description,
+            default_price: {
+              id: product.default_price.id,
+              unit_amount: product.default_price.unit_amount,
+              currency: product.default_price.currency,
+            },
+            images: product.images,
+            quantity: 1,
+          }));
+          setProducts(products);
+        };
+        fetchProducts();
+      }
   }, [user.isLoggedIn]);
-
-  if (user.isLoggedIn) {
-    const fetchProducts = async () => {
-      const response = await axios.get(
-        "http://localhost:3000/api/stripe/fetch-products"
-      );
-      const productsData = response.data.data;
-
-      const products: IProduct[] = productsData.map((product: IProduct) => ({
-        id: product.id,
-        name: product.name,
-        description: product.description,
-        default_price: {
-          id: product.default_price.id,
-          unit_amount: product.default_price.unit_amount,
-          currency: product.default_price.currency,
-        },
-        images: product.images,
-        quantity: 1,
-      }));
-      setProducts(products);
-    };
-    fetchProducts();
-  }
 
   useEffect(() => {
     localStorage.setItem("cart-items", JSON.stringify(cartItems));
   }, [cartItems]);
 
   const handleClick = (product: IProduct) => {
-    setCartItems([...cartItems, product]);
+    const existingItem = cartItems.find((item) => item.id === product.id);
+    if (!existingItem) {
+      setCartItems([...cartItems, product]);
+    } else {
+      window.alert("This item is already in your cart.")
+    }
   };
 
   return (
