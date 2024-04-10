@@ -95,15 +95,15 @@ export const Cart = () => {
     <div className="py-10 flex flex-col justify-center gap-10">
       <h2 className="text-3xl">Your cart</h2>
       {cartItems.map((item) => (
-        <div key={item.id} className="flex w-lg gap-4">
+        <div key={item.id} className="flex gap-5">
           <img src={item.images} alt={item.name} className="max-w-48" />
-          <div className="flex flex-col justify-between">
+          <div className="flex flex-col justify-between max-w-64">
             <h2 className="font-bold">{item.name}</h2>
             <p className="font-bold">
               {(item.default_price.unit_amount / 100).toFixed(2)}
               {item.default_price.currency}
             </p>
-            <div className="flex justify-between items-center">
+            <div className="flex gap-5">
               <input
                 onChange={(e) => changeQuantity(e, item.id)}
                 className="input w-24 text-lg font-bold"
@@ -138,9 +138,13 @@ export const Cart = () => {
         </div>
       ))}
 
-      <button className="btn" onClick={() => setIsAddressInputVisible(true)}>
-        Gå vidare
-      </button>
+      {cartItems.length > 0 ? (
+        <button className="btn" onClick={() => setIsAddressInputVisible(true)}>
+          Gå vidare
+        </button>
+      ) : (
+        <p>Your cart is empty 🥲</p>
+      )}
       {isAddressInputVisible ? (
         <div>
           <h2>Leverans</h2>
