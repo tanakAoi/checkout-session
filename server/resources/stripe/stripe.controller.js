@@ -71,9 +71,9 @@ const validation = async (req, res) => {
     const orders = JSON.parse(await fs.readFile("./data/orders.json"));
     orders.push(order);
     await fs.writeFile("./data/orders.json", JSON.stringify(orders, null, 5));
+    res.status(200).json({ verified: true, order });
   }
 
-  res.status(200).json({ verified: true });
 };
 
 module.exports = { createCustomer, fetchProducts, checkout, validation };
