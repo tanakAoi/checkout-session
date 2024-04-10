@@ -6,8 +6,8 @@ const sendOrderConfirmation = async (req, res) => {
 
   const productDetails = order.products.map((product) => {
     return `
-      <p>${product.description}</p>
-      <p>${product.price.unit_amount / 100} SEK x ${product.quantity}</p>
+      <p>${product.name}</p>
+      <p>${product.price} SEK x ${product.quantity}</p>
       <br>
     `;
   });
@@ -21,6 +21,7 @@ const sendOrderConfirmation = async (req, res) => {
     subject: "Order confirmation",
     html: `
     <h2>Thank you for your order, ${order.customerName}!<h2>
+    <br>
     <h3><strong>Order Details:</strong></h3>
     <p>Order number: ${order.orderNumber}</p>
     <p>Order date: ${order.date}</p>

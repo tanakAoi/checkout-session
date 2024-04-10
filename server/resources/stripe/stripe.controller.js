@@ -1,4 +1,5 @@
 const initStripe = require("../../stripe");
+const crypto = require("crypto");
 const fs = require("fs").promises;
 
 const stripe = initStripe();
@@ -49,31 +50,55 @@ const checkout = async (req, res) => {
 const validation = async (req, res) => {
   const sessionId = req.body.sessionId;
   const session = await stripe.checkout.sessions.retrieve(sessionId);
-  
+
   if (session.payment_status === "paid") {
     const lineItems = await stripe.checkout.sessions.listLineItems(sessionId);
-    const servicePoint = JSON.parse(req.body.servicePoint)
+    const servicePoint = JSON.parse(req.body.servicePoint);
+
+    const products = lineItems.data.map((product) => {
+      return {
+        id: product.id,
+        name: product.description,
+        price: product.price.unit_amount / 100,
+        currency: product.price.currency,
+        quantity: product.quantity,
+      };
+    });
 
     const order = {
-      orderNumber: Math.floor(Math.random() * 10000000),
-      date: new Date(),
+      orderNumber: "",
+      date: new Date().toLocaleString("sv-SE"),
       customerName: session.customer_details.name,
-      products: lineItems.data,
+      products: products,
       total: session.amount_total,
       shippingAddress: {
         servicePoint: servicePoint.name,
         city: servicePoint.deliveryAddress.city,
-        street: servicePoint.deliveryAddress.streetName + servicePoint.deliveryAddress.streetNumber,
-        postalCode: servicePoint.deliveryAddress.postalCode
+        street:
+          servicePoint.deliveryAddress.streetName +
+          servicePoint.deliveryAddress.streetNumber,
+        postalCode: servicePoint.deliveryAddress.postalCode,
       },
     };
 
-    const orders = JSON.parse(await fs.readFile("./data/orders.json"));
-    orders.push(order);
-    await fs.writeFile("./data/orders.json", JSON.stringify(orders, null, 5));
-    res.status(200).json({ verified: true, order });
-  }
+    const orderString = JSON.stringify(order);
+    const hash = crypto.createHash("sha256").update(orderString).digest("hex");
+    const orderNumber = hash.slice(0, 10);
+    order.orderNumber = orderNumber;
 
+    const orders = JSON.parse(await fs.readFile("./data/orders.json"));
+    const existingOrder = orders.find(
+      (o) => o.orderNumber === order.orderNumber
+    );
+
+    if (!existingOrder) {
+      orders.push(order);
+      await fs.writeFile("./data/orders.json", JSON.stringify(orders, null, 5));
+      res.status(200).json({ verified: true, order });
+    } else {
+      res.status(400).json({ error: "Order already exists" });
+    }
+  }
 };
 
 module.exports = { createCustomer, fetchProducts, checkout, validation };
