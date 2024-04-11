@@ -44,8 +44,9 @@ export const Login = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center gap-10">
-      <h2 className="text-xl">Login</h2>
+    <div className="relative h-screen w-full flex flex-col justify-center items-center gap-10 bg-[url('images/login-image.jpg')] bg-cover bg-left-top">
+      <p className="">Photo by <a href="https://unsplash.com/@timbar?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Timothy Barlin</a> on <a href="https://unsplash.com/photos/blue-ceramic-cup-with-cappuccino-on-blue-saucer-vZS5xNQ8iHc?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a></p>
+      <h2 className="text-3xl text-white">Login</h2>
       <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
         <label className="input input-bordered flex items-center gap-2">
           <svg
