@@ -27,7 +27,7 @@ const sendOrderConfirmation = async (req, res) => {
     <p>Order date: ${order.date}</p>
     <br>
     <p>${productDetails}</p>
-    <p><strong>Total Amount:</strong> ${order.total / 100} SEK</p>
+    <p><strong>Total Amount:</strong> ${order.total} SEK</p>
     <br>
     <h3><strong>Shipping Address:</strong></h3>
     <p>${order.shippingAddress.servicePoint}</p>
