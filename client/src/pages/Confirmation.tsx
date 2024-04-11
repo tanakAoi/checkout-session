@@ -8,7 +8,8 @@ export const Confirmation = () => {
   const [verified, setVerified] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isMailSent, setIsMailSent] = useState(false);
-  const [orderDetail, setOrderDetail] = useState()
+  const [orderDetail, setOrderDetail] = useState();
+  const [error, setError] = useState(false);
   const user = useContext(UserContext);
 
   useEffect(() => {
@@ -17,43 +18,49 @@ export const Confirmation = () => {
 
   useEffect(() => {
     if (!verified) {
-      const validation = async () => {
-        setIsLoading(true);
+      try {
+        const validation = async () => {
+          setIsLoading(true);
 
-        let sessionId;
-        const sessionIdData = localStorage.getItem("sessionID");
-        const servicePoint = localStorage.getItem("service-point");
+          let sessionId;
+          const sessionIdData = localStorage.getItem("sessionID");
+          const servicePoint = localStorage.getItem("service-point");
 
-        if (sessionIdData && servicePoint) {
-          sessionId = JSON.parse(sessionIdData);
-          const data = {
-            sessionId,
-            servicePoint,
-          };
+          if (sessionIdData && servicePoint) {
+            sessionId = JSON.parse(sessionIdData);
 
-          const response = await axios.post(
-            "http://localhost:3000/api/stripe/validation",
-            data
-          );
+            const data = {
+              sessionId: sessionId,
+              servicePoint: servicePoint,
+            };
 
-          if (response.status === 200) {
-            setOrderDetail(response.data.order)
-            setVerified(response.data.verified);
-            setIsLoading(false);
+            const response = await axios.post(
+              "http://localhost:3000/api/stripe/validation",
+              data
+            );
+
+            if (response.status === 200) {
+              setOrderDetail(response.data.order);
+              setVerified(response.data.verified);
+              setIsLoading(false);
+            }
           }
-        }
-      };
-      validation();
+        };
+        validation();
+      } catch (error) {
+        setError(true);
+        console.error("Error", error);
+      }
     }
 
     if (verified && !isMailSent) {
       const sendConfirmation = async () => {
-        const data = {
-          email: user.userData.email,
-          order: orderDetail
-        };
-
         try {
+          const data = {
+            email: user.userData.email,
+            order: orderDetail,
+          };
+
           const response = await axios.post(
             "http://localhost:3000/api/sendgrid/send-order-confirmation",
             data
@@ -63,6 +70,7 @@ export const Confirmation = () => {
             setIsMailSent(true);
           }
         } catch (error) {
+          setError(true);
           console.error("Error", error);
         }
       };
@@ -87,7 +95,7 @@ export const Confirmation = () => {
           </button>
         </div>
       ) : (
-        <p>Loading...</p>
+        <p>{error ? "Something went wrong" : "Loading..."}</p>
       )}
     </div>
   );
