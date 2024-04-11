@@ -4,7 +4,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 
 export const Header = () => {
-  const user = useContext(UserContext)
+  const user = useContext(UserContext);
   const navigate = useNavigate();
 
   const logout = async () => {
@@ -27,16 +27,27 @@ export const Header = () => {
   };
 
   return (
-    <header className="h-16 bg-stone-300 px-6 flex items-center justify-between">
-      <NavLink to={"/home"}>Cafe Nova</NavLink>
+    <>
       {user.isLoggedIn ? (
-        <div className="flex gap-4">
-          <button><NavLink to={"/cart"}>Cart</NavLink></button>
-          <button onClick={logout}>Logout</button>
-        </div>
+        <header className="w-full h-16 bg-stone-300 px-8 flex items-center justify-between relative">
+          <p>
+            Logged in as <strong>{user.userData.userName}</strong>
+          </p>
+          <NavLink
+            to={"/home"}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+          >
+            Cafe Nova
+          </NavLink>
+          <div className="flex gap-8">
+            <NavLink to={"/cart"}>Cart</NavLink>
+            <NavLink to={"/order-history"}>Your order</NavLink>
+            <button onClick={logout}>Logout</button>
+          </div>
+        </header>
       ) : (
         ""
       )}
-    </header>
+    </>
   );
 };

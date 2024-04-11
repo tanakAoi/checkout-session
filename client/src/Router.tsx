@@ -7,6 +7,7 @@ import { Login } from "./pages/Login";
 import { Start } from "./pages/Start";
 import { Cart } from "./pages/Cart";
 import { Confirmation } from "./pages/Confirmation";
+import { OrderHistory } from "./pages/OrderHistory";
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
       {
         path: "/confirmation",
         element: <Confirmation />,
+      },
+      {
+        path: "/order-history",
+        element: <OrderHistory />,
       },
     ],
   },

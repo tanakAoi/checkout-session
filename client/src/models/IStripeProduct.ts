@@ -1,4 +1,4 @@
-export interface IProduct {
+export interface IStripeProduct {
   id: string;
   name: string;
   description: string;

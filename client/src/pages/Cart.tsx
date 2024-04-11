@@ -1,13 +1,13 @@
 import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { IProduct } from "../models/IProduct";
+import { IStripeProduct } from "../models/IStripeProduct";
 import { UserContext } from "../contexts/UserContext";
 import { UserAddress } from "../models/UserAddress";
 import { ServicePoint } from "../models/ServicePoint";
 import { checkAuth } from "../components/CheckAuth";
 
 export const Cart = () => {
-  const [cartItems, setCartItems] = useState<IProduct[]>(
+  const [cartItems, setCartItems] = useState<IStripeProduct[]>(
     JSON.parse(localStorage.getItem("cart-items") || "[]")
   );
   const user = useContext(UserContext);

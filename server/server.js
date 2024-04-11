@@ -4,6 +4,7 @@ const cookieSession = require("cookie-session");
 require("dotenv").config();
 
 const authRouter = require("./resources/auth/auth.router")
+const ordersRouter = require("./resources/orders/orders.router")
 const stripeRouter = require("./resources/stripe/stripe.router");
 const postnordRouter = require("./resources/postnord/postnord.router")
 const sendgridRouter = require("./resources/sendgrid/sendgrid.router")
@@ -23,6 +24,7 @@ app.use(
 );
 
 app.use("/api/auth", authRouter);
+app.use("/api/orders", ordersRouter)
 app.use("/api/stripe", stripeRouter);
 app.use("/api/postnord", postnordRouter);
 app.use("/api/sendgrid", sendgridRouter);

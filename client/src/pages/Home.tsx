@@ -1,13 +1,13 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { IProduct } from "../models/IProduct";
+import { IStripeProduct } from "../models/IStripeProduct";
 import { UserContext } from "../contexts/UserContext";
 import { checkAuth } from "../components/CheckAuth";
 
 export const Home = () => {
   const user = useContext(UserContext);
-  const [products, setProducts] = useState<IProduct[]>([]);
-  const [cartItems, setCartItems] = useState<IProduct[]>(
+  const [products, setProducts] = useState<IStripeProduct[]>([]);
+  const [cartItems, setCartItems] = useState<IStripeProduct[]>(
     JSON.parse(localStorage.getItem("cart-items") || "[]")
   );
 
@@ -21,7 +21,7 @@ export const Home = () => {
           );
           const productsData = response.data.data;
     
-          const products: IProduct[] = productsData.map((product: IProduct) => ({
+          const products: IStripeProduct[] = productsData.map((product: IStripeProduct) => ({
             id: product.id,
             name: product.name,
             description: product.description,
@@ -43,7 +43,7 @@ export const Home = () => {
     localStorage.setItem("cart-items", JSON.stringify(cartItems));
   }, [cartItems]);
 
-  const handleClick = (product: IProduct) => {
+  const handleClick = (product: IStripeProduct) => {
     const existingItem = cartItems.find((item) => item.id === product.id);
     if (!existingItem) {
       setCartItems([...cartItems, product]);
