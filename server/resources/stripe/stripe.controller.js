@@ -48,36 +48,42 @@ const checkout = async (req, res) => {
 };
 
 const validation = async (req, res) => {
-  const sessionId = req.body.sessionId;
+  const { sessionId, servicePoint } = req.body;
   const session = await stripe.checkout.sessions.retrieve(sessionId);
 
   if (session.payment_status === "paid") {
     const lineItems = await stripe.checkout.sessions.listLineItems(sessionId);
-    const servicePoint = JSON.parse(req.body.servicePoint);
+    const parsedServicePoint = JSON.parse(servicePoint);
 
     const products = lineItems.data.map((product) => {
+      const productId = product.id
+
+      // const productImg = await stripe.products.retrieve(productId)
+
       return {
-        id: product.id,
+        id: productId,
         name: product.description,
         price: product.price.unit_amount / 100,
         currency: product.price.currency,
         quantity: product.quantity,
+        image: ""
       };
     });
 
     const order = {
+      stripeId: session.customer,
       orderNumber: "",
       date: new Date().toLocaleString("sv-SE"),
       customerName: session.customer_details.name,
       products: products,
-      total: session.amount_total,
+      total: session.amount_total / 100,
       shippingAddress: {
-        servicePoint: servicePoint.name,
-        city: servicePoint.deliveryAddress.city,
+        servicePoint: parsedServicePoint.name,
+        city: parsedServicePoint.deliveryAddress.city,
         street:
-          servicePoint.deliveryAddress.streetName +
-          servicePoint.deliveryAddress.streetNumber,
-        postalCode: servicePoint.deliveryAddress.postalCode,
+          parsedServicePoint.deliveryAddress.streetName +
+          parsedServicePoint.deliveryAddress.streetNumber,
+        postalCode: parsedServicePoint.deliveryAddress.postalCode,
       },
     };
 
@@ -86,7 +92,8 @@ const validation = async (req, res) => {
     const orderNumber = hash.slice(0, 10);
     order.orderNumber = orderNumber;
 
-    const orders = JSON.parse(await fs.readFile("./data/orders.json"));
+    const ordersData = await fs.readFile("./data/orders.json");
+    const orders = JSON.parse(ordersData);
     const existingOrder = orders.find(
       (o) => o.orderNumber === order.orderNumber
     );
