@@ -1,7 +1,12 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../contexts/UserContext";
-import { checkAuth } from "../components/CheckAuth";
+import { useEffect, useState } from "react";
+import { useUser } from "../contexts/UserContext";
+
+interface IOrderProduct {
+  name: string;
+  price: number;
+  quantity: number;
+}
 
 interface IOrder {
   orderNumber: string;
@@ -15,38 +20,30 @@ interface IOrder {
   };
 }
 
-interface IOrderProduct {
-  name: string;
-  price: number;
-  quantity: number;
-}
-
 export const OrderHistory = () => {
-  const user = useContext(UserContext);
-  const [orders, setOrders] = useState<IOrder[]>([]);
-
-  useEffect(() => {
-    checkAuth(user);
-  }, [user.isLoggedIn]);
+  const { userData } = useUser();
+  const [orders, setOrders] = useState<IOrder[]>(
+    JSON.parse(localStorage.getItem("orders") || "[]")
+  );
 
   useEffect(() => {
     const fetchOrders = async () => {
-      const stripeId = user.userData.stripeId;
+      const stripeId = userData.stripeId;
+      console.log(stripeId);
 
-      if (stripeId) {
-        try {
-          const response = await axios.post(
-            "http://localhost:3000/api/orders/fetch-orders",
-            { stripeId }
-          );
-          setOrders(response.data);
-        } catch (error) {
-          console.error("Error", error);
-        }
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/api/orders/fetch-orders",
+          { stripeId }
+        );
+        setOrders(response.data);
+        localStorage.setItem("orders", JSON.stringify(response.data));
+      } catch (error) {
+        console.error("Error", error);
       }
     };
     fetchOrders();
-  }, [user.isLoggedIn]);
+  }, []);
 
   return (
     <div>
