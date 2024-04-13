@@ -9,7 +9,7 @@ export const Layout = () => {
     <UserProvider>
       <CartProvider>
         <Header />
-        <main className="flex flex-col items-center font-sans text-dark">
+        <main className="flex flex-col items-center font-sans text-dark bg-coffee">
           <Outlet />
         </main>
         <footer></footer>

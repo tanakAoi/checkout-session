@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useUser } from "../contexts/UserContext";
+import { Button } from "../components/Button";
 
 interface IOrderProduct {
   name: string;
@@ -71,7 +72,7 @@ export const OrderHistory = () => {
       ) : (
         <>
           <p>Please Log in to see your order history.</p>
-          <button className="btn">Login</button>
+          <Button children={"Login"} size={"sm"} color={"light"} linkTo={"/login"} />
         </>
       )}
     </div>

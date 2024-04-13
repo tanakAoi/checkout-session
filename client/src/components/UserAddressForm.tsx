@@ -1,5 +1,6 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import { IUserAddress } from "../models/IUserAddress";
+import { Button } from "./Button";
 
 interface IUserAddressFormProps {
   proceedToServicePoints: (userAddress: IUserAddress) => void;
@@ -39,9 +40,9 @@ export const UserAddressForm = ({
   };
 
   return (
-    <div>
-      <h2>Leverans</h2>
-      <form className="flex flex-col gap-2">
+    <div className="pt-10 flex flex-col">
+      <h2 className="text-xl font-bold">Delivery Address</h2>
+      <form className="flex flex-col gap-3 pt-5">
         <input className="input" type="text" value={"Sweden"} disabled />
         <input
           className="input"
@@ -49,7 +50,7 @@ export const UserAddressForm = ({
           onChange={handleAddress}
           name="city"
           id=""
-          placeholder="Stad"
+          placeholder="City"
           required
         />
         <input
@@ -58,7 +59,7 @@ export const UserAddressForm = ({
           onChange={handleAddress}
           name="postalCode"
           id=""
-          placeholder="Postnummer"
+          placeholder="Postal code"
           required
         />
         <input
@@ -67,13 +68,11 @@ export const UserAddressForm = ({
           onChange={handleAddress}
           name="street"
           id=""
-          placeholder="Gata (t.ex. Odengatan 53)"
+          placeholder="Street ( ex. Odengatan 53 )"
           required
         />
         {userAddress && (
-          <button className="btn" onClick={handleClick}>
-            Välja utlämningsställe
-          </button>
+          <Button children={"next : service point"} size={"md"} color={"light"} event={handleClick} />
         )}
       </form>
     </div>

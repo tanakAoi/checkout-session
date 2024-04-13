@@ -7,8 +7,9 @@ export default {
       serif: ["Bitter", "serif"]
     },
     colors: {
-      "main": "#96af9a",
-      "base": "#d9d1c7",
+      "leaf": "#96af9a",
+      "coffee": "#e4ded8",
+      "blossom": "#ff9090",
       "dark": "#222",
       "light": "#f2f2f2"
     },

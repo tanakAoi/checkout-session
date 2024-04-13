@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { IProduct } from "../models/IProduct";
 import { useCart } from "../contexts/CartContext";
+import { Button } from "../components/Button";
 
 export const Home = () => {
   const { addToCart } = useCart();
@@ -32,7 +33,7 @@ export const Home = () => {
 
   return (
     <div>
-      <div className="p-10 flex flex-wrap justify-center gap-10">
+      <div className="p-10 min-h-screen w-full flex flex-wrap items-start justify-center gap-10">
         {products.map((product) => (
           <div
             key={product.id}
@@ -46,9 +47,7 @@ export const Home = () => {
                 {(product.default_price.unit_amount / 100).toFixed(2)}
                 {product.default_price.currency}
               </p>
-              <button className="btn" onClick={() =>addToCart(product)}>
-                Add to cart
-              </button>
+              <Button children={"Add to cart"} size={"sm"} color={"light"} event={() => addToCart(product)} />
             </div>
           </div>
         ))}

@@ -6,19 +6,20 @@ interface IBtnProps {
     className?: string;
     disabled?: boolean; 
     selected?: boolean,
-    size: "md" | "lg" | "xl";
+    size: "sm" | "md" | "lg" | "xl";
     color: "light" | "dark" | "transparent";
     event?: (e: any) => void;
 }
 
 const style = {
     sizes: {
-        md: "text-md px-10",
+        sm: "text-sm px-6",
+        md: "text-base px-10",
         lg: "text-lg px-14",
         xl: "text-xl px-16"
     },
     colors: {
-        light: `bg-main text-light border-transparent border-2 hover:bg-light hover:text-main hover:border-main hover:border-2`,
+        light: `bg-leaf text-light border-transparent border-2 hover:bg-light hover:text-leaf hover:border-leaf hover:border-2`,
         dark: `bg-neutral-950 text-primary border-neutral-950 hover:bg-neutral-50 hover:text-primary`,
         transparent: `text-primary shadow-none bg-transparent border-none hover:bg-neutral-950 hover:text-primary`,
         darkSelected: `bg-neutral-950 text-primary border-neutral-950 hover:bg-neutral-950 hover:border-neutral-950`

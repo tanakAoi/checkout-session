@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useUser } from "../contexts/UserContext";
-import { NavLink } from "react-router-dom";
+import { Button } from "../components/Button";
 
 export const Confirmation = () => {
   const [verified, setVerified] = useState(false);
@@ -80,17 +80,22 @@ export const Confirmation = () => {
   }
 
   return (
-    <div className="h-screen flex">
-      {verified && !isLoading ? (
-        <div className="flex flex-col justify-center items-center gap-10">
-          <p className="text-xl font-bold">Thank you for your order!</p>
+    <div className="h-screen w-full flex justify-center">
+      {isLoading ? (
+        <span className="loading loading-dots loading-lg"></span>
+      ) : verified ? (
+        <div className="flex flex-col justify-center items-center gap-14">
+          <p className="text-2xl font-bold">Thank you for your order!</p>
           <p>{isMailSent ? "Your order confirmation has been sent 📫" : ""}</p>
-          <button className="btn">
-            <NavLink to={"/"}>Back to home</NavLink>
-          </button>
+          <Button
+            children={"Back to home"}
+            size={"md"}
+            color={"light"}
+            linkTo={"/"}
+          />
         </div>
       ) : (
-        <p>{error ? "Something went wrong" : "Loading..."}</p>
+        <p>{error && "Something went wrong"}</p>
       )}
     </div>
   );

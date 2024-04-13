@@ -5,7 +5,7 @@ export const Header = () => {
   const { isLoggedIn, userData, logout } = useUser();
 
   return (
-    <header className="w-full h-16 px-8 flex items-center justify-between relative bg-main text-light">
+    <header className="w-full h-16 px-8 flex items-center justify-between relative bg-leaf text-light">
       <p>{isLoggedIn ? `Logged in as ${userData.userName}` : ""}</p>
       <NavLink
         to={"/"}
