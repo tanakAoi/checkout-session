@@ -1,35 +1,38 @@
-import { ChangeEvent, FormEvent, useContext, useState } from "react";
-import { User } from "../models/User";
+import { ChangeEvent, FormEvent, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { UserContext } from "../contexts/UserContext";
+import { useUser } from "../contexts/UserContext";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export const Login = () => {
-  const [userData, setUserData] = useState<User>(new User("", "", "", ""));
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
   const [errorMessage, setErrorMessage] = useState("");
-  const user = useContext(UserContext);
+  const { login } = useUser();
   const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setUserData({ ...userData, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    const login = async () => {
+    const authLogin = async () => {
       try {
         const response = await axios.post(
           "http://localhost:3000/api/auth/login",
-          userData,
+          formData,
           {
             withCredentials: true,
           }
         );
 
         if (response.status === 200) {
-          user.login(response.data);
-          navigate("/home");
+          login(response.data);
+          navigate("/");
         }
       } catch (error: any) {
         if (error.response.status === 400) {
@@ -40,12 +43,21 @@ export const Login = () => {
         }
       }
     };
-    login();
+    authLogin();
   };
 
   return (
     <div className="relative h-screen w-full flex flex-col justify-center items-center gap-10 bg-[url('images/login-image.jpg')] bg-cover bg-left-top">
-      <p className="">Photo by <a href="https://unsplash.com/@timbar?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Timothy Barlin</a> on <a href="https://unsplash.com/photos/blue-ceramic-cup-with-cappuccino-on-blue-saucer-vZS5xNQ8iHc?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a></p>
+      <p className="">
+        Photo by{" "}
+        <a href="https://unsplash.com/@timbar?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+          Timothy Barlin
+        </a>{" "}
+        on{" "}
+        <a href="https://unsplash.com/photos/blue-ceramic-cup-with-cappuccino-on-blue-saucer-vZS5xNQ8iHc?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+          Unsplash
+        </a>
+      </p>
       <h2 className="text-3xl text-white">Login</h2>
       <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
         <label className="input input-bordered flex items-center gap-2">
@@ -94,6 +106,10 @@ export const Login = () => {
         <button className="btn">Login</button>
         {errorMessage ? <span>{errorMessage}</span> : ""}
       </form>
+      <p className="text-white">
+        Are you not registered yet? ➡️{" "}
+        <NavLink to={"/register"}>Register</NavLink>
+      </p>
     </div>
   );
 };
