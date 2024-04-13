@@ -20,7 +20,7 @@ const sendOrderConfirmation = async (req, res) => {
     },
     subject: "Order confirmation",
     html: `
-    <h2>Thank you for your order, ${order.customerName}!<h2>
+    <h2>Thank you for your order, ${order.customer.customerName}!<h2>
     <br>
     <h3><strong>Order Details:</strong></h3>
     <p>Order number: ${order.orderNumber}</p>
