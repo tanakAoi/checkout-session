@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.Toastify__toast-body {
+  font-family: "Poppins", sans-serif;
+}
+
 .bottom-right {
   position: absolute;
   bottom: 1rem;
