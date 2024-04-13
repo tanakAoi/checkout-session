@@ -1,8 +1,7 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../contexts/UserContext";
+import { useEffect, useState } from "react";
+import { useUser } from "../contexts/UserContext";
 import { NavLink } from "react-router-dom";
-import { checkAuth } from "../components/CheckAuth";
 
 export const Confirmation = () => {
   const [verified, setVerified] = useState(false);
@@ -10,11 +9,7 @@ export const Confirmation = () => {
   const [isMailSent, setIsMailSent] = useState(false);
   const [orderDetail, setOrderDetail] = useState();
   const [error, setError] = useState(false);
-  const user = useContext(UserContext);
-
-  useEffect(() => {
-    checkAuth(user);
-  }, [user.isLoggedIn]);
+  const { userData } = useUser();
 
   useEffect(() => {
     if (!verified) {
@@ -57,7 +52,7 @@ export const Confirmation = () => {
       const sendConfirmation = async () => {
         try {
           const data = {
-            email: user.userData.email,
+            email: userData.email,
             order: orderDetail,
           };
 
@@ -80,7 +75,7 @@ export const Confirmation = () => {
 
   if (verified && isMailSent) {
     localStorage.setItem("sessionID", "");
-    localStorage.setItem("cart-items", "[]");
+    localStorage.setItem("cart", "[]");
     localStorage.setItem("service-point", "");
   }
 
@@ -91,7 +86,7 @@ export const Confirmation = () => {
           <p className="text-xl font-bold">Thank you for your order!</p>
           <p>{isMailSent ? "Your order confirmation has been sent 📫" : ""}</p>
           <button className="btn">
-            <NavLink to={"/home"}>Back to home</NavLink>
+            <NavLink to={"/"}>Back to home</NavLink>
           </button>
         </div>
       ) : (

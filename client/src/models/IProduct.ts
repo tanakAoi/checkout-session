@@ -1,4 +1,4 @@
-export interface IStripeProduct {
+export interface IProduct {
   id: string;
   name: string;
   description: string;
@@ -8,5 +8,4 @@ export interface IStripeProduct {
     currency: string
   };
   images: string;
-  quantity: number
 }

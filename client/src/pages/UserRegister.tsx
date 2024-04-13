@@ -1,13 +1,16 @@
-import { useState, ChangeEvent, FormEvent, useContext } from "react";
-import { IUser, User } from "../models/User";
+import { useState, ChangeEvent, FormEvent } from "react";
+import { IUser } from "../models/IUser";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { UserContext } from "../contexts/UserContext";
+import { useUser } from "../contexts/UserContext";
 
 export const UserRegister = () => {
-  const [newUser, setNewUser] = useState<User>(new User("", "", "", ""));
-  const user = useContext(UserContext);
-  const navigate = useNavigate();
+  const [newUser, setNewUser] = useState<IUser>({
+    stripeId: "",
+    userName: "",
+    email: "",
+    password: "",
+  });
+  const { login } = useUser();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNewUser({ ...newUser, [e.target.name]: e.target.value });
@@ -45,8 +48,7 @@ export const UserRegister = () => {
       );
 
       if (response.status === 201) {
-        user.login(userWithId);
-        navigate("/home");
+        login(userWithId);
       }
     };
   };

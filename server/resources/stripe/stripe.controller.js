@@ -36,7 +36,7 @@ const checkout = async (req, res) => {
     customer: customerId,
     line_items: cartItems.map((item) => {
       return {
-        price: item.default_price.id,
+        price: item.product.default_price.id,
         quantity: item.quantity,
       };
     }),
@@ -56,7 +56,7 @@ const validation = async (req, res) => {
     const parsedServicePoint = JSON.parse(servicePoint);
 
     const products = lineItems.data.map((product) => {
-      const productId = product.id
+      const productId = product.id;
 
       // const productImg = await stripe.products.retrieve(productId)
 
@@ -66,15 +66,27 @@ const validation = async (req, res) => {
         price: product.price.unit_amount / 100,
         currency: product.price.currency,
         quantity: product.quantity,
-        image: ""
+        image: "",
       };
     });
 
+    const currentDate = new Date();
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    };
+    const orderDate = currentDate.toLocaleString("sv-SE", options);
+
     const order = {
-      stripeId: session.customer,
       orderNumber: "",
-      date: new Date().toLocaleString("sv-SE"),
-      customerName: session.customer_details.name,
+      date: orderDate,
+      customer: {
+        stripeId: session.customer,
+        customerName: session.customer_details.name,
+      },
       products: products,
       total: session.amount_total / 100,
       shippingAddress: {
