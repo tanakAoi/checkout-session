@@ -11,7 +11,7 @@ const createCustomer = async (req, res) => {
 
   const customerAlreadyExists = customers.data.find((c) => c.email === email);
   if (customerAlreadyExists) {
-    return res.status(400).json("Customer already exists.");
+    return res.status(400).json("User already exists.");
   }
 
   const customer = await stripe.customers.create({

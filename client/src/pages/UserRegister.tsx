@@ -2,43 +2,25 @@ import { useState, ChangeEvent, FormEvent } from "react";
 import { IUser } from "../models/IUser";
 import axios from "axios";
 import { useUser } from "../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 export const UserRegister = () => {
+  const navigate = useNavigate();
   const [newUser, setNewUser] = useState<IUser>({
     stripeId: "",
     userName: "",
     email: "",
     password: "",
   });
+  const [errorMessage, setErrorMessage] = useState("");
   const { login } = useUser();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNewUser({ ...newUser, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
+  const registerAuth = async (userWithId: IUser) => {
     try {
-      const registerStripe = async () => {
-        const response = await axios.post(
-          "http://localhost:3000/api/stripe/create-customer",
-          newUser
-        );
-
-        if (response.status === 201 && response.data.id) {
-          const userWithId = { ...newUser, stripeId: response.data.id };
-          setNewUser(userWithId);
-
-          await registerAuth(userWithId);
-        }
-      };
-      registerStripe();
-    } catch (error) {
-      console.error("Error", error);
-    }
-
-    const registerAuth = async (userWithId: IUser) => {
       const response = await axios.post(
         "http://localhost:3000/api/auth/register",
         userWithId,
@@ -49,8 +31,37 @@ export const UserRegister = () => {
 
       if (response.status === 201) {
         login(userWithId);
+        navigate("/");
       }
-    };
+    } catch (error: any) {
+      console.error("Error: create a customer on server", error);
+      const errorMessage = error.response.data;
+      setErrorMessage(errorMessage);
+    }
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/stripe/create-customer",
+        newUser
+      );
+
+      if (response.status === 201 && response.data.id) {
+        const userWithId = { ...newUser, stripeId: response.data.id };
+        setNewUser(userWithId);
+
+        await registerAuth(userWithId);
+      }
+    } catch (error: any) {
+      console.error("Error: create a customer on Stripe", error);
+      console.log(error);
+
+      const errorMessage = error.response.data;
+      setErrorMessage(errorMessage);
+    }
   };
 
   return (
@@ -121,7 +132,16 @@ export const UserRegister = () => {
             required
           />
         </label>
-        <button className="btn">register</button>
+        {errorMessage ? (
+          <div
+            className="tooltip tooltip-right tooltip-open tooltip-error"
+            data-tip={errorMessage}
+          >
+            <button className="btn w-full">Register</button>
+          </div>
+        ) : (
+          <button className="btn w-full">Register</button>
+        )}
       </form>
     </div>
   );

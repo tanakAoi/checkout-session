@@ -7,7 +7,7 @@ const register = async (req, res) => {
   
   const users = await fetchUsers();
 
-  const userAlreadyExists = users.find((u) => u.stripeId === stripeId);
+  const userAlreadyExists = users.find((u) => u.email === email && u.userName === userName);
   if (userAlreadyExists) {
     return res.status(400).json("User already exists.");
   }

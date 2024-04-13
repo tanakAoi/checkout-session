@@ -103,8 +103,16 @@ export const Login = () => {
             onChange={handleChange}
           />
         </label>
-        <button className="btn">Login</button>
-        {errorMessage ? <span>{errorMessage}</span> : ""}
+        {errorMessage ? (
+          <div
+            className="tooltip tooltip-right tooltip-open tooltip-error"
+            data-tip={errorMessage}
+          >
+            <button className="btn w-full">Login</button>
+          </div>
+        ) : (
+          <button className="btn w-full">Login</button>
+        )}
       </form>
       <p className="text-white">
         Are you not registered yet? ➡️{" "}
