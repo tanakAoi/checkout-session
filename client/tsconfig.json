@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "src/models/NewUser.ts", "src/models/User.ts"],
+  "include": ["src", "src/models/NewUser.ts", "src/models/IUser.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

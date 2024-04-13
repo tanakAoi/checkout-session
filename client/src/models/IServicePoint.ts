@@ -1,4 +1,4 @@
-export interface ServicePoint {
+export interface IServicePoint {
     name: string,
     servicePointId: string,
     deliveryAddress: {
