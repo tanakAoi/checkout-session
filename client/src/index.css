@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.bottom-right {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+}
