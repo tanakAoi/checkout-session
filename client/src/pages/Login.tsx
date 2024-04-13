@@ -2,6 +2,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import axios from "axios";
 import { useUser } from "../contexts/UserContext";
 import { NavLink, useNavigate } from "react-router-dom";
+import { Button } from "../components/Button";
 
 export const Login = () => {
   const [formData, setFormData] = useState({
@@ -47,19 +48,9 @@ export const Login = () => {
   };
 
   return (
-    <div className="relative h-screen w-full flex flex-col justify-center items-center gap-10 bg-[url('images/login-image.jpg')] bg-cover bg-left-top">
-      <p className="">
-        Photo by{" "}
-        <a href="https://unsplash.com/@timbar?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
-          Timothy Barlin
-        </a>{" "}
-        on{" "}
-        <a href="https://unsplash.com/photos/blue-ceramic-cup-with-cappuccino-on-blue-saucer-vZS5xNQ8iHc?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
-          Unsplash
-        </a>
-      </p>
-      <h2 className="text-3xl text-white">Login</h2>
-      <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
+    <div className="relative h-screen w-full flex flex-col justify-center items-center gap-10 bg-[url('images/login-image.jpg')] bg-cover bg-left-top text-dark">
+      <h2 className="text-4xl text-light">Login</h2>
+      <form className="flex flex-col gap-3 w-80" onSubmit={handleSubmit}>
         <label className="input input-bordered flex items-center gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -108,15 +99,27 @@ export const Login = () => {
             className="tooltip tooltip-right tooltip-open tooltip-error"
             data-tip={errorMessage}
           >
-            <button className="btn w-full">Login</button>
+            <Button children={"Login"} size={"md"} color={"light"} />
           </div>
         ) : (
-          <button className="btn w-full">Login</button>
+          <Button children={"Login"} size={"md"} color={"light"} />
         )}
       </form>
-      <p className="text-white">
+      <p className="text-light">
         Are you not registered yet? ➡️{" "}
-        <NavLink to={"/register"}>Register</NavLink>
+        <NavLink to={"/register"} className="hover:font-bold">
+          Register
+        </NavLink>
+      </p>
+      <p className="bottom-right text-light opacity-80 font-thin">
+        Photo by{" "}
+        <a href="https://unsplash.com/@timbar?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+          Timothy Barlin
+        </a>{" "}
+        on{" "}
+        <a href="https://unsplash.com/photos/blue-ceramic-cup-with-cappuccino-on-blue-saucer-vZS5xNQ8iHc?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+          Unsplash
+        </a>
       </p>
     </div>
   );

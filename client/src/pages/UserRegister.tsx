@@ -3,6 +3,7 @@ import { IUser } from "../models/IUser";
 import axios from "axios";
 import { useUser } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
+import { Button } from "../components/Button";
 
 export const UserRegister = () => {
   const navigate = useNavigate();
@@ -65,9 +66,9 @@ export const UserRegister = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center gap-10">
-      <h2 className="text-xl">Register a new user</h2>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+    <div className="relative h-screen w-full flex flex-col justify-center items-center gap-10 bg-[url('images/register-image.jpg')] bg-cover bg-left-top text-dark">
+      <h2 className="text-4xl">Register</h2>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-80">
         <label className="input input-bordered flex items-center gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -137,12 +138,22 @@ export const UserRegister = () => {
             className="tooltip tooltip-right tooltip-open tooltip-error"
             data-tip={errorMessage}
           >
-            <button className="btn w-full">Register</button>
+            <Button children={"Register"} size={"md"} color={"light"} />
           </div>
         ) : (
-          <button className="btn w-full">Register</button>
+          <Button children={"Register"} size={"md"} color={"light"} />
         )}
       </form>
+      <p className="bottom-right text-light opacity-80 font-thin">
+        Photo by{" "}
+        <a href="https://unsplash.com/@heftiba?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+          Toa Heftiba
+        </a>{" "}
+        on{" "}
+        <a href="https://unsplash.com/photos/flat-lay-photography-of-coffee-in-teacup-near-plate-of-sliced-cake-W6sqUYlJRiw?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
+          Unsplash
+        </a>
+      </p>
     </div>
   );
 };
