@@ -33,11 +33,11 @@ export const Home = () => {
 
   return (
     <div>
-      <div className="p-10 min-h-screen w-full flex flex-wrap items-start justify-center gap-10">
+      <div className="p-10 min-h-screen w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
         {products.map((product) => (
           <div
             key={product.id}
-            className="flex flex-col justify-between items-center max-w-xl gap-4 *:max-w-xs"
+            className="flex flex-col justify-between items-center max-w-xl gap-4"
           >
             <img src={product.images} alt={product.name} />
             <h2 className="font-bold text-lg">{product.name}</h2>
@@ -47,7 +47,12 @@ export const Home = () => {
                 {(product.default_price.unit_amount / 100).toFixed(2)}
                 {product.default_price.currency}
               </p>
-              <Button children={"Add to cart"} size={"sm"} color={"light"} event={() => addToCart(product)} />
+              <Button
+                children={"Add to cart"}
+                size={"sm"}
+                color={"light"}
+                event={() => addToCart(product)}
+              />
             </div>
           </div>
         ))}
