@@ -21,7 +21,7 @@ interface IOrder {
 }
 
 export const OrderHistory = () => {
-  const { userData } = useUser();
+  const { isLoggedIn, userData } = useUser();
   const [orders, setOrders] = useState<IOrder[]>(
     JSON.parse(localStorage.getItem("orders") || "[]")
   );
@@ -46,27 +46,34 @@ export const OrderHistory = () => {
   }, []);
 
   return (
-    <div>
-      {orders.map((order) => (
-        <div key={order.orderNumber} className="pb-10">
-          <p>Order number: {order.orderNumber}</p>
-          <p>Order date: {order.date}</p>
-          <p>Products: </p>
-          {order.products.map((product) => (
-            <div key={product.name}>
-              <p>{product.name}</p>
-              <p>
-                {product.price} SEK x {product.quantity}
-              </p>
-            </div>
-          ))}
-          <p>Service point: {order.shippingAddress.servicePoint}</p>
-          <p>
-            Service point address: {order.shippingAddress.street}{" "}
-            {order.shippingAddress.postalCode}, {order.shippingAddress.city}
-          </p>
-        </div>
-      ))}
+    <div className="min-h-screen flex flex-col justify-center items-center gap-5">
+      {isLoggedIn ? (
+        orders.map((order) => (
+          <div key={order.orderNumber} className="pb-10">
+            <p>Order number: {order.orderNumber}</p>
+            <p>Order date: {order.date}</p>
+            <p>Products: </p>
+            {order.products.map((product) => (
+              <div key={product.name}>
+                <p>{product.name}</p>
+                <p>
+                  {product.price} SEK x {product.quantity}
+                </p>
+              </div>
+            ))}
+            <p>Service point: {order.shippingAddress.servicePoint}</p>
+            <p>
+              Service point address: {order.shippingAddress.street}{" "}
+              {order.shippingAddress.postalCode}, {order.shippingAddress.city}
+            </p>
+          </div>
+        ))
+      ) : (
+        <>
+          <p>Please Log in to see your order history.</p>
+          <button className="btn">Login</button>
+        </>
+      )}
     </div>
   );
 };

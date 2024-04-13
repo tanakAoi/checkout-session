@@ -8,7 +8,7 @@ import { useUser } from "../contexts/UserContext";
 
 export const Cart = () => {
   const { cart, removeFromCart, updateQuantity } = useCart();
-  const { userData } = useUser();
+  const { isLoggedIn, userData } = useUser();
   const [proceedToUserAddress, setProceedToUserAddress] = useState(false);
   const [proceedToServicePoints, setProceedToServicePoints] = useState(false);
   const [proceedToCheckout, setProceedToCheckout] = useState(false);
@@ -88,11 +88,21 @@ export const Cart = () => {
           </div>
         </div>
       ))}
-
       {cart.length > 0 ? (
-        <button className="btn" onClick={() => setProceedToUserAddress(true)}>
-          Gå vidare
-        </button>
+        !isLoggedIn && (
+          <div
+            className="tooltip tooltip-bottom tooltip-warning"
+            data-tip="Please log in to proceed"
+          >
+            <button
+              className="btn w-full"
+              disabled={!isLoggedIn}
+              onClick={() => setProceedToUserAddress(true)}
+            >
+              Gå vidare
+            </button>
+          </div>
+        )
       ) : (
         <p>Your cart is empty 🥲</p>
       )}
