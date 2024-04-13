@@ -1,4 +1,4 @@
-## Start app
+## Start the app
 ### Server
 1. ```cd server```
 2. ```npm start```
@@ -8,12 +8,17 @@
 2. ```npm install```
 3. ```npm run dev```
 
-## Test
+## Testing
 * Login
-    *  (username: test)
+    * username: test
     * email: test@example.com
     * password: 12345678
-* Promotion code:  **PROMO20**
+* Payment
+    * Card number: 4242 4242 4242 4242
+    * CVC: any 3 digits  
+    * Date: any future date
+    * Promotion code:  **PROMO20**
+* You'll get a confirmation mail when you register as a new user with your email address and make an order.
 
 ---
 
