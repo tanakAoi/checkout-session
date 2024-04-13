@@ -36,7 +36,7 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
-    if(storedCart.length > 0) {
+    if (storedCart.length > 0) {
       setCart(storedCart);
     }
   }, []);
@@ -69,13 +69,17 @@ export const CartProvider = ({ children }: PropsWithChildren) => {
   };
 
   const updateQuantity = (productId: string, quantity: number) => {
-    const updatedCart = cart.map((product) => {
-      if (product.product.id === productId) {
-        return { ...product, quantity: quantity };
-      }
-      return product;
-    });
-    setCart(updatedCart);
+    if (quantity === 0) {
+      removeFromCart(productId);
+    } else {
+      const updatedCart = cart.map((product) => {
+        if (product.product.id === productId) {
+          return { ...product, quantity: quantity };
+        }
+        return product;
+      });
+      setCart(updatedCart);
+    }
   };
 
   return (

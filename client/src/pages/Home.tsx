@@ -5,7 +5,7 @@ import { useCart } from "../contexts/CartContext";
 import { Button } from "../components/Button";
 
 export const Home = () => {
-  const { addToCart } = useCart();
+  const { cart, addToCart, updateQuantity } = useCart();
   const [products, setProducts] = useState<IProduct[]>([]);
 
   useEffect(() => {
@@ -47,12 +47,27 @@ export const Home = () => {
                 {(product.default_price.unit_amount / 100).toFixed(2)}
                 {product.default_price.currency}
               </p>
-              <Button
-                children={"Add to cart"}
-                size={"sm"}
-                color={"light"}
-                event={() => addToCart(product)}
-              />
+              {cart.some((item) => item.product.id === product.id) ? (
+                <input
+                  type="number"
+                  className="input w-24 bg-light border-leaf border-2"
+                  min={0}
+                  value={
+                    cart.find((item) => item.product.id === product.id)
+                      ?.quantity
+                  }
+                  onChange={(e) =>
+                    updateQuantity(product.id, parseInt(e.target.value))
+                  }
+                />
+              ) : (
+                <Button
+                  children={"Add to cart"}
+                  size={"sm"}
+                  color={"light"}
+                  event={() => addToCart(product)}
+                />
+              )}
             </div>
           </div>
         ))}
