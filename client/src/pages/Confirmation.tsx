@@ -37,7 +37,6 @@ export const Confirmation = () => {
             if (response.status === 200) {
               setOrderDetail(response.data.order);
               setVerified(response.data.verified);
-              setIsLoading(false);
             }
           }
         };
@@ -45,6 +44,8 @@ export const Confirmation = () => {
       } catch (error) {
         setError(true);
         console.error("Error", error);
+      } finally {
+        setIsLoading(false);
       }
     }
 
@@ -75,7 +76,6 @@ export const Confirmation = () => {
 
   if (verified && isMailSent) {
     localStorage.setItem("sessionID", "");
-    localStorage.setItem("cart", "[]");
     localStorage.setItem("service-point", "");
   }
 
