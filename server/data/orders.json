@@ -134,5 +134,44 @@
                "street": "Trotzgatan14",
                "postalCode": "79130"
           }
+     },
+     {
+          "orderNumber": "df93f6e920",
+          "date": "14 april 2024 14:23",
+          "customer": {
+               "stripeId": "cus_PtoLLiEpDONnI9",
+               "customerName": "test"
+          },
+          "products": [
+               {
+                    "id": "li_1P5S5p17MeC2urWPgalmpR51",
+                    "name": "Artisanal Chocolate-Dipped Espresso Beans (100g)",
+                    "price": 90,
+                    "currency": "sek",
+                    "quantity": 1
+               },
+               {
+                    "id": "li_1P5S5p17MeC2urWPbDRQCMJW",
+                    "name": "Organic Cold Brew Kit (50g * 4)",
+                    "price": 120,
+                    "currency": "sek",
+                    "quantity": 1
+               },
+               {
+                    "id": "li_1P5S5p17MeC2urWPHHBuRFMS",
+                    "name": "Premium Whole Bean Espresso (200g)",
+                    "price": 100,
+                    "currency": "sek",
+                    "quantity": 1
+               }
+          ],
+          "discount": 62,
+          "total": 248,
+          "shippingAddress": {
+               "servicePoint": "Ica Supermarket Slätta",
+               "city": "FALUN",
+               "street": "Slätta centrum6A",
+               "postalCode": "79174"
+          }
      }
 ]
