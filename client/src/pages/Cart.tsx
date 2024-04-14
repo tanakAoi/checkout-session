@@ -127,7 +127,7 @@ export const Cart = () => {
             />
           )
         ) : (
-          <p>Your cart is empty 🥲</p>
+          <p>Your cart is empty 🛒</p>
         )}
         {proceedToUserAddress && (
           <UserAddressForm

@@ -52,21 +52,20 @@ const validation = async (req, res) => {
   const session = await stripe.checkout.sessions.retrieve(sessionId);
 
   if (session.payment_status === "paid") {
-    const lineItems = await stripe.checkout.sessions.listLineItems(sessionId);
     const parsedServicePoint = JSON.parse(servicePoint);
-
-    const products = lineItems.data.map((product) => {
+    const lineItems = await stripe.checkout.sessions.listLineItems(sessionId);
+    
+    const products = await (lineItems.data.map((product) => {
       const productId = product.id;
-      // const productImg = await stripe.products.retrieve(productId)
+
       return {
         id: productId,
         name: product.description,
         price: product.price.unit_amount / 100,
         currency: product.price.currency,
         quantity: product.quantity,
-        image: "",
       };
-    });
+    }));
 
     const currentDate = new Date();
     const options = {

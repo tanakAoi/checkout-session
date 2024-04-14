@@ -99,10 +99,10 @@ export const Login = () => {
             className="tooltip tooltip-right tooltip-open tooltip-error"
             data-tip={errorMessage}
           >
-            <Button children={"Login"} size={"md"} color={"light"} />
+            <Button children={"Login"} size={"md"} color={"light"} className={"w-full"} />
           </div>
         ) : (
-          <Button children={"Login"} size={"md"} color={"light"} />
+          <Button children={"Login"} size={"md"} color={"light"} className={"w-full"} />
         )}
       </form>
       <p className="text-light">

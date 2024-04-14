@@ -138,10 +138,10 @@ export const UserRegister = () => {
             className="tooltip tooltip-right tooltip-open tooltip-error"
             data-tip={errorMessage}
           >
-            <Button children={"Register"} size={"md"} color={"light"} />
+            <Button children={"Register"} size={"md"} color={"light"} className={"w-full"} />
           </div>
         ) : (
-          <Button children={"Register"} size={"md"} color={"light"} />
+          <Button children={"Register"} size={"md"} color={"light"} className={"w-full"} />
         )}
       </form>
       <p className="bottom-right text-light opacity-80 font-thin">
