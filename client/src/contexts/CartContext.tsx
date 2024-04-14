@@ -32,14 +32,9 @@ const CartContext = createContext<ICartContext>(initValues);
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }: PropsWithChildren) => {
-  const [cart, setCart] = useState<ICartItem[]>([]);
-
-  useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
-    if (storedCart.length > 0) {
-      setCart(storedCart);
-    }
-  }, []);
+  const [cart, setCart] = useState<ICartItem[]>(
+    JSON.parse(localStorage.getItem("cart") || "[]")
+  );
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
