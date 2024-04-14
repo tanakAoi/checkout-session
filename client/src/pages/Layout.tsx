@@ -4,6 +4,7 @@ import { UserProvider } from "../contexts/UserContext";
 import { CartProvider } from "../contexts/CartContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Footer } from "../components/Footer";
 
 export const Layout = () => {
 
@@ -15,7 +16,7 @@ export const Layout = () => {
         <main className="flex flex-col items-center font-sans text-dark bg-coffee">
           <Outlet />
         </main>
-        <footer></footer>
+        <Footer />
       </CartProvider>
     </UserProvider>
   );
