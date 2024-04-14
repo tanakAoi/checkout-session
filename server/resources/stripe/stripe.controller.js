@@ -57,9 +57,7 @@ const validation = async (req, res) => {
 
     const products = lineItems.data.map((product) => {
       const productId = product.id;
-
       // const productImg = await stripe.products.retrieve(productId)
-
       return {
         id: productId,
         name: product.description,
@@ -88,6 +86,7 @@ const validation = async (req, res) => {
         customerName: session.customer_details.name,
       },
       products: products,
+      discount: session.total_details.amount_discount / 100,
       total: session.amount_total / 100,
       shippingAddress: {
         servicePoint: parsedServicePoint.name,
@@ -117,6 +116,8 @@ const validation = async (req, res) => {
     } else {
       res.status(400).json({ error: "Order already exists" });
     }
+  } else {
+    res.status(400).json({ error: "Validation error" });
   }
 };
 
