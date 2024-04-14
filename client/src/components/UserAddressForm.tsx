@@ -40,7 +40,7 @@ export const UserAddressForm = ({
   };
 
   return (
-    <div className="pt-10 flex flex-col">
+    <div className="py-10 flex flex-col">
       <h2 className="text-xl font-bold">Delivery Address</h2>
       <form className="flex flex-col gap-3 pt-5">
         <input className="input" type="text" value={"Sweden"} disabled />
