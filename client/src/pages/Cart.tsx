@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UserAddressForm } from "../components/UserAddressForm";
 import { useCart } from "../contexts/CartContext";
 import { ServicePoints } from "../components/ServicePoints";
@@ -29,12 +29,22 @@ export const Cart = () => {
     }
   };
 
+  useEffect(() => {
+    if (proceedToCheckout) {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }, [proceedToCheckout]);
+
   const handleProceedToCheckout = () => {
     const checkoutData = {
       cartItems: cart,
       customerId: userData.stripeId,
     };
     checkout(checkoutData);
+    localStorage.setItem("cart", "[]");
   };
 
   return (
