@@ -45,19 +45,21 @@ export const OrderHistory = () => {
   return (
     <div className="min-h-screen flex flex-col items-center gap-5 py-20">
       <h2 className="text-3xl pb-10">Order History</h2>
-      <div className="flex flex-col gap-5">
-        <select
-          className="select select-bordered max-w-xs"
-          value={sortBy}
-          onChange={(e) => handleSortChange(e)}
-        >
-          <option disabled selected value="default">Sort by:</option>
-          <option value="latest">Latest</option>
-          <option value="oldest">Oldest</option>
-        </select>
-        {isLoggedIn ? (
-          orders.length > 0 ? (
-            sortOrders(sortBy).map((order) => (
+      {isLoggedIn ? (
+        orders.length > 0 ? (
+          <div className="flex flex-col gap-5">
+            <select
+              className="select select-bordered max-w-xs"
+              value={sortBy}
+              onChange={(e) => handleSortChange(e)}
+            >
+              <option disabled selected value="default">
+                Sort by:
+              </option>
+              <option value="latest">Latest</option>
+              <option value="oldest">Oldest</option>
+            </select>
+            {sortOrders(sortBy).map((order) => (
               <div
                 key={order.orderNumber}
                 className="collapse collapse-plus bg-coffee"
@@ -74,7 +76,6 @@ export const OrderHistory = () => {
                       <p>
                         {product.name} {product.price} SEK x {product.quantity}
                       </p>
-                      <p></p>
                     </div>
                   ))}
                   {order.discount === 0 ? (
@@ -82,7 +83,6 @@ export const OrderHistory = () => {
                   ) : (
                     <p>Discount: {order.discount} SEK</p>
                   )}
-
                   <p>Total amount: {order.total} SEK</p>
                   <p>Service point: {order.shippingAddress.servicePoint}</p>
                   <p>
@@ -92,22 +92,22 @@ export const OrderHistory = () => {
                   </p>
                 </div>
               </div>
-            ))
-          ) : (
-            <p>No order history yet 🙂</p>
-          )
-        ) : (
-          <div className="flex flex-col items-center gap-8">
-            <p>Please Log in to see your order history.</p>
-            <Button
-              children={"Login"}
-              size={"sm"}
-              color={"light"}
-              linkTo={"/login"}
-            />
+            ))}
           </div>
-        )}
-      </div>
+        ) : (
+          <p>No order history yet 🙂</p>
+        )
+      ) : (
+        <div className="flex flex-col items-center gap-8">
+          <p>Please Log in to see your order history.</p>
+          <Button
+            children={"Login"}
+            size={"sm"}
+            color={"light"}
+            linkTo={"/login"}
+          />
+        </div>
+      )}
     </div>
   );
 };
