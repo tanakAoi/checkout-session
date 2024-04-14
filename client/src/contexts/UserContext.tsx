@@ -7,6 +7,7 @@ import {
 } from "react";
 import { IUser } from "../models/IUser";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export interface IUserContext {
   isLoggedIn: boolean;
@@ -44,6 +45,10 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
   const login = (userData: IUser) => {
     setIsLoggedIn(true);
     setUserData(userData);
+    toast.success("You are logged in!", {
+      position: "top-right",
+      autoClose: 2000,
+    });
   };
 
   const logout = async () => {
@@ -59,6 +64,11 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
       if (response.status === 200) {
         setIsLoggedIn(false);
         setUserData(initValues.userData);
+        localStorage.setItem("orders", "[]");
+        toast.success("You are logged out.", {
+          position: "top-right",
+          autoClose: 2000,
+        });
       }
     } catch (error: any) {
       console.error("Error", error);
