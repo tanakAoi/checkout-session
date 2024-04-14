@@ -22,12 +22,14 @@ export const Cart = () => {
     },
   });
 
-  const handleProceedToServicePoints = (address: IUserAddress) => {
-    if (address) {
-      setUserAddress(address);
-      setProceedToServicePoints(true);
+  useEffect(() => {
+    if (proceedToUserAddress) {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: "smooth",
+      });
     }
-  };
+  }, [proceedToUserAddress]);
 
   useEffect(() => {
     if (proceedToCheckout) {
@@ -37,6 +39,13 @@ export const Cart = () => {
       });
     }
   }, [proceedToCheckout]);
+
+  const handleProceedToServicePoints = (address: IUserAddress) => {
+    if (address) {
+      setUserAddress(address);
+      setProceedToServicePoints(true);
+    }
+  };
 
   const handleProceedToCheckout = () => {
     const checkoutData = {
@@ -119,34 +128,36 @@ export const Cart = () => {
               />
             </div>
           ) : (
-            <Button
-              children={"next : delivery address"}
-              size={"md"}
-              color={"light"}
-              event={() => setProceedToUserAddress(true)}
-            />
+            <>
+              <Button
+                children={"next : delivery address"}
+                size={"md"}
+                color={"light"}
+                event={() => setProceedToUserAddress(true)}
+              />
+              {proceedToUserAddress && (
+                <UserAddressForm
+                  proceedToServicePoints={handleProceedToServicePoints}
+                />
+              )}
+              {proceedToServicePoints && (
+                <ServicePoints
+                  userAddress={userAddress}
+                  proceedToCheckout={() => setProceedToCheckout(true)}
+                />
+              )}
+              {proceedToCheckout && (
+                <Button
+                  children={"next : checkout"}
+                  size={"md"}
+                  color={"light"}
+                  event={handleProceedToCheckout}
+                />
+              )}
+            </>
           )
         ) : (
           <p>Your cart is empty 🛒</p>
-        )}
-        {proceedToUserAddress && (
-          <UserAddressForm
-            proceedToServicePoints={handleProceedToServicePoints}
-          />
-        )}
-        {proceedToServicePoints && (
-          <ServicePoints
-            userAddress={userAddress}
-            proceedToCheckout={() => setProceedToCheckout(true)}
-          />
-        )}
-        {proceedToCheckout && (
-          <Button
-            children={"next : checkout"}
-            size={"md"}
-            color={"light"}
-            event={handleProceedToCheckout}
-          />
         )}
       </div>
     </div>
