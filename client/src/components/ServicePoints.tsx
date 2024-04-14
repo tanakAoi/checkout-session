@@ -18,9 +18,11 @@ export const ServicePoints = ({
     JSON.parse(localStorage.getItem("service-point") || "[]")
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const fetchServicePoints = async () => {
+      setIsError(false)
       setIsLoading(true);
 
       try {
@@ -31,26 +33,30 @@ export const ServicePoints = ({
         setServicePoints(
           response.data.servicePointInformationResponse.servicePoints
         );
-        setIsLoading(false);
       } catch (error) {
         console.error("Error: fetchServicePoints", error);
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchServicePoints();
-  }, []);
+  }, [userAddress]);
 
   const handleClick = (servicePoint: IServicePoint) => {
     setUserServicePoint(servicePoint);
     proceedToCheckout();
   };
-  
+
   useEffect(() => {
     localStorage.setItem("service-point", JSON.stringify(userServicePoint));
-  }, [userServicePoint])
+  }, [userServicePoint]);
 
   return (
     <div className="flex flex-col items-center">
-      {isLoading ? (
+      {isError ? (
+        <p>Please enter a valid address.</p>
+      ) : isLoading ? (
         <span className="loading loading-ring loading-lg"></span>
       ) : (
         servicePoints.length > 0 && (
@@ -61,7 +67,7 @@ export const ServicePoints = ({
                   key={servicePoint.servicePointId}
                   className={`card w-full bg-base-100 shadow-xl ${
                     userServicePoint === servicePoint
-                      ? "border-4 border-blossom"
+                      ? "border-4 border-sky"
                       : "border-4 border-transparent"
                   }`}
                 >
