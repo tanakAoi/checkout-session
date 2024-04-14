@@ -11,14 +11,24 @@
 ## Testing
 * Login
     * username: test
-    * email: test@example.com
-    * password: 12345678
+    * email: **test@example.com**
+    * password: **12345678**
 * Payment
-    * Card number: 4242 4242 4242 4242
+    * Card number: **4242 4242 4242 4242**
     * CVC: any 3 digits  
     * Date: any future date
     * Promotion code:  **PROMO20**
-* You'll get a confirmation mail when you register as a new user with your email address and make an order.
+* You'll get a confirmation mail when you register a new user with your email address and make an order.
+
+## Tools
+* Stripe
+* Postnord API
+* Sendgrid API
+* Vite
+* Tailwind & DaisyUI (Styling)
+* Copilot GPT (Images & Product descriptions)
+* Unsplash (Images)
+* Google fonts
 
 ---
 
