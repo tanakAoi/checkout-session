@@ -2,24 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useUser } from "../contexts/UserContext";
 import { Button } from "../components/Button";
-
-interface IOrderProduct {
-  name: string;
-  price: number;
-  quantity: number;
-}
-
-interface IOrder {
-  orderNumber: string;
-  date: string;
-  products: IOrderProduct[];
-  shippingAddress: {
-    servicePoint: string;
-    city: string;
-    street: string;
-    postalCode: string;
-  };
-}
+import { IOrder } from "../models/IOrder";
 
 export const OrderHistory = () => {
   const { isLoggedIn, userData } = useUser();
@@ -50,37 +33,48 @@ export const OrderHistory = () => {
       <h2 className="text-3xl pb-10">Order History</h2>
       <div className="flex flex-col gap-5">
         {isLoggedIn ? (
-          orders.map((order) => (
-            <div
-              key={order.orderNumber}
-              className="collapse collapse-plus bg-coffee"
-            >
-              <input type="radio" name="my-accordion-3" defaultChecked />
-              <div className="collapse-title text-xl font-medium">
-                <p>Order number: {order.orderNumber}</p>
+          orders.length > 0 ? (
+            orders.map((order) => (
+              <div
+                key={order.orderNumber}
+                className="collapse collapse-plus bg-coffee"
+              >
+                <input type="radio" name="my-accordion-3" defaultChecked />
+                <div className="collapse-title text-xl font-medium">
+                  <p>Order number: {order.orderNumber}</p>
+                </div>
+                <div className="collapse-content flex flex-col gap-3 *:text-lg">
+                  <p>Order date: {order.date}</p>
+                  <p>Products: </p>
+                  {order.products.map((product) => (
+                    <div key={product.name}>
+                      <p>
+                        {product.name} {product.price} SEK x {product.quantity}
+                      </p>
+                      <p></p>
+                    </div>
+                  ))}
+                  {order.discount === 0 ? (
+                    ""
+                  ) : (
+                    <p>Discount: {order.discount} SEK</p>
+                  )}
+
+                  <p>Total amount: {order.total} SEK</p>
+                  <p>Service point: {order.shippingAddress.servicePoint}</p>
+                  <p>
+                    Service point address: {order.shippingAddress.street}{" "}
+                    {order.shippingAddress.postalCode},{" "}
+                    {order.shippingAddress.city}
+                  </p>
+                </div>
               </div>
-              <div className="collapse-content flex flex-col gap-3 *:text-lg">
-                <p>Order date: {order.date}</p>
-                <p>Products: </p>
-                {order.products.map((product) => (
-                  <div key={product.name}>
-                    <p>
-                      {product.name} {product.price} SEK x {product.quantity}
-                    </p>
-                    <p></p>
-                  </div>
-                ))}
-                <p>Service point: {order.shippingAddress.servicePoint}</p>
-                <p>
-                  Service point address: {order.shippingAddress.street}{" "}
-                  {order.shippingAddress.postalCode},{" "}
-                  {order.shippingAddress.city}
-                </p>
-              </div>
-            </div>
-          ))
+            ))
+          ) : (
+            <p>No order history yet 🙂</p>
+          )
         ) : (
-          <>
+          <div className="flex flex-col items-center gap-8">
             <p>Please Log in to see your order history.</p>
             <Button
               children={"Login"}
@@ -88,7 +82,7 @@ export const OrderHistory = () => {
               color={"light"}
               linkTo={"/login"}
             />
-          </>
+          </div>
         )}
       </div>
     </div>
