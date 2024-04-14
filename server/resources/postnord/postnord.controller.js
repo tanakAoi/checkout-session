@@ -9,6 +9,7 @@ const servicePoints = async (req, res) => {
     res.status(200).json(response.data)
   } catch (error) {
     console.error("Error", error);
+    res.status(400).json("Could not get service points")
   }
 };
 
