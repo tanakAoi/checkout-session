@@ -25,6 +25,20 @@ const fetchProducts = async (req, res) => {
   const products = await stripe.products.list({
     expand: ["data.default_price"],
   });
+
+  const formattedProduct = products.data.map((product) => {
+    return {
+      name: product.name,
+      description: product.description,
+      price: product.default_price.unit_amount / 100,
+    };
+  });
+
+  await fs.writeFile(
+    "./data/products.json",
+    JSON.stringify(formattedProduct, null, 5)
+  );
+
   res.status(200).json(products);
 };
 
@@ -54,8 +68,8 @@ const validation = async (req, res) => {
   if (session.payment_status === "paid") {
     const parsedServicePoint = JSON.parse(servicePoint);
     const lineItems = await stripe.checkout.sessions.listLineItems(sessionId);
-    
-    const products = await (lineItems.data.map((product) => {
+
+    const products = await lineItems.data.map((product) => {
       const productId = product.id;
 
       return {
@@ -65,7 +79,7 @@ const validation = async (req, res) => {
         currency: product.price.currency,
         quantity: product.quantity,
       };
-    }));
+    });
 
     const currentDate = new Date();
     const options = {

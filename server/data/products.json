@@ -1,0 +1,32 @@
+[
+     {
+          "name": "Artisanal Chocolate-Dipped Espresso Beans (100g)",
+          "description": "Indulge in espresso beans coated in rich dark chocolate. Bitter espresso meets sweet chocolate for a gourmet treat. Perfect for snacking or gifting.",
+          "price": 90
+     },
+     {
+          "name": "Organic Cold Brew Kit (50g * 4)",
+          "description": "Beat the heat with our DIY cold brew kit. Simply steep overnight for a smooth, refreshing concentrate. Serve over ice for a revitalizing pick-me-up. (Kit includes coffee pouches and brewing instructions.)",
+          "price": 120
+     },
+     {
+          "name": "Premium Whole Bean Espresso (200g)",
+          "description": "Elevate your coffee game with our rich Arabica beans. Bold, aromatic, with notes of dark chocolate and roasted nuts. Ideal for espresso lovers.",
+          "price": 100
+     },
+     {
+          "name": "Morning Blend Ground Coffee (500g)",
+          "description": "Start your day right with our Arabica blend. Medium-roasted for a smooth taste with hints of caramel and chocolate. Perfect for a refreshing morning cup.",
+          "price": 180
+     },
+     {
+          "name": "Chocolate Chip Cookies (12-pack)",
+          "description": "Delicious cookies made with plenty of fresh chocolate chips. Each cookie is handcrafted with care.",
+          "price": 120
+     },
+     {
+          "name": "Premium Coffee Blend (350g)",
+          "description": "Introducing our Premium Coffee Blend. We've carefully selected and roasted high-quality coffee beans to create this exquisite blend. Enjoy the rich flavor and aromatic aroma of our premium coffee.",
+          "price": 160
+     }
+]
