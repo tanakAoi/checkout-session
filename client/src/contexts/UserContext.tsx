@@ -25,7 +25,7 @@ const initValues = {
     email: "",
     password: "",
   },
-  login: (userData: IUser) => {},
+  login: () => {},
   logout: () => {},
   checkAuth: () => {},
 };
