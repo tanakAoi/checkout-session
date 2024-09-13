@@ -35,7 +35,7 @@ const fetchProducts = async (req, res) => {
   });
 
   await fs.writeFile(
-    "./data/products.json",
+    "../../data/products.json",
     JSON.stringify(formattedProduct, null, 5)
   );
 
