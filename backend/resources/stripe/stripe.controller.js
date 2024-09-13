@@ -35,7 +35,7 @@ const fetchProducts = async (req, res) => {
     };
   });
 
-  const filePath = path.join(__dirname, "..", "data", "products.json");
+  const filePath = path.join(__dirname, "..", "..", "data", "products.json");
   await fs.writeFile(filePath, JSON.stringify(formattedProduct, null, 5));
 
   res.status(200).json(products);
