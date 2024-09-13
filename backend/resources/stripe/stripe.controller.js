@@ -1,6 +1,7 @@
 const initStripe = require("../../stripe");
 const crypto = require("crypto");
 const fs = require("fs").promises;
+const path = require("path");
 
 const stripe = initStripe();
 
@@ -34,10 +35,8 @@ const fetchProducts = async (req, res) => {
     };
   });
 
-  await fs.writeFile(
-    "../../data/products.json",
-    JSON.stringify(formattedProduct, null, 5)
-  );
+  const filePath = path.join(__dirname, "data", "products.json");
+  await fs.writeFile(filePath, JSON.stringify(formattedProduct, null, 5));
 
   res.status(200).json(products);
 };
