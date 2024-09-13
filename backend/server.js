@@ -12,10 +12,12 @@ const sendgridRouter = require("./resources/sendgrid/sendgrid.router")
 const app = express();
 
 app.use(express.json());
-app.use(cors({
-    origin: "http://localhost:5173",
-    credentials: true
-}));
+app.use(
+  cors({
+    origin: "https://checkout-session.vercel.app/",
+    credentials: true,
+  })
+);
 app.use(
   cookieSession({
     secret: "2we34fgh",
