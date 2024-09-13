@@ -11,7 +11,7 @@ export const Home = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await axios.get(
-        "http://localhost:3000/api/stripe/fetch-products"
+        "https://checkout-session-backend.vercel.app/api/stripe/fetch-products"
       );
       const productsData = response.data.data;
 
